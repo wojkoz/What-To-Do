@@ -50,7 +50,7 @@ android {
 }
 
 detekt {
-    buildUponDefaultConfig = true // preconfigure defaults
+    buildUponDefaultConfig = false // preconfigure defaults
     allRules = false // activate all available (even unstable) rules.
     config.setFrom("$projectDir/config/detekt.yml")
     baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt

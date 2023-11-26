@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = Route.MAIN_SCREEN) {
                         composable(Route.MAIN_SCREEN) { MainScreen() }
                     }
-
                 }
             }
         }

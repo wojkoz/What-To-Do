@@ -13,11 +13,11 @@ fun MainScreen() {
     Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
             item {
-                //top bar, list chooser
+                // top bar, list chooser
             }
 
             item {
-                //to do listView
+                // to do listView
             }
         }
     }
