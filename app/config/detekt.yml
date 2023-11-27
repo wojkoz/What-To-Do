@@ -515,8 +515,6 @@ style:
     active: false
     singleLine: 'necessary'
     multiLine: 'consistent'
-  FinalNewline:
-    insertFinalNewLine: false
   CanBeNonNullable:
     active: false
   CascadingCallWrapping:

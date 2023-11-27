@@ -53,6 +53,7 @@ detekt {
     buildUponDefaultConfig = false // preconfigure defaults
     allRules = false // activate all available (even unstable) rules.
     config.setFrom("$projectDir/config/detekt.yml")
+    autoCorrect = true
     baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
 }
 
