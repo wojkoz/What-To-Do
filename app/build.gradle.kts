@@ -4,6 +4,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("io.gitlab.arturbosch.detekt").version("1.23.4")
+    kotlin("kapt")
 }
 
 android {
@@ -99,10 +100,14 @@ dependencies {
 
     //Hilt
     implementation("com.google.dagger:hilt-android:2.48")
-    ksp("com.google.dagger:hilt-android-compiler:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     //Detekt rules
     detektPlugins("io.nlopez.compose.rules:detekt:0.3.3")
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
