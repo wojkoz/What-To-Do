@@ -5,15 +5,21 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.whattodo.R
+import com.example.whattodo.ui.composables.AppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
-    Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
+fun TodosScreen() {
+    Scaffold(
+        topBar = { AppBar(title = stringResource(id = R.string.main_screen_title), showBackIcon = false) },
+        modifier = Modifier.fillMaxSize()
+    ) { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
             item {
-                // top bar, list chooser
+                // list chooser
             }
 
             item {
@@ -26,5 +32,5 @@ fun MainScreen() {
 @Preview(showBackground = true)
 @Composable
 private fun MainScreenPreview() {
-    MainScreen()
+    TodosScreen()
 }

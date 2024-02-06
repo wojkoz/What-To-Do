@@ -1,6 +1,6 @@
 package com.example.whattodo
 
-import MainScreen
+import TodosScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Route.MAIN_SCREEN) {
-                        composable(Route.MAIN_SCREEN) { MainScreen() }
+                        composable(Route.MAIN_SCREEN) { TodosScreen() }
                     }
                 }
             }
