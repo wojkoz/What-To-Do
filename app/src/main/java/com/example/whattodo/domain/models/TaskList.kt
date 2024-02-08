@@ -15,4 +15,5 @@ data class TaskList(
     val doneTasksCount: Int = 0,
     val allTasksCount: Int = 0,
     val todoTasksCount: Int = 0,
+    val isActive: Boolean,
 )
