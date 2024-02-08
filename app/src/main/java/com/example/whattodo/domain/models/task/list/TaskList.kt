@@ -1,4 +1,4 @@
-package com.example.whattodo.domain.models
+package com.example.whattodo.domain.models.task.list
 
 /**
 * Represents a task list.

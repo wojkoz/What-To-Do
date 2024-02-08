@@ -1,8 +1,9 @@
 package com.example.whattodo.data.mappers.task
 
 import com.example.whattodo.data.local.entities.todos.TaskItemEntity
-import com.example.whattodo.domain.models.TaskItem
-import com.example.whattodo.domain.models.TaskPriority
+import com.example.whattodo.data.model.task.CreateTaskItem
+import com.example.whattodo.domain.models.task.item.TaskItem
+import com.example.whattodo.domain.models.task.item.TaskPriority
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -35,5 +36,17 @@ fun TaskItemEntity.toTaskItem(): TaskItem {
         validUntil = validUntil,
         isValid = isValid,
         priority = TaskPriority.fromInt(this.priority),
+    )
+}
+
+fun CreateTaskItem.toTaskItemEntity(): TaskItemEntity {
+    return TaskItemEntity(
+        title = this.title,
+        content = this.content,
+        parentListId = this.parentListId,
+        isDone = false,
+        createdAt = LocalDateTime.now().format(formatter),
+        validUntil = this.validUntil.format(formatter),
+        priority = this.priority.priorityAsInt,
     )
 }

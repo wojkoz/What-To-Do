@@ -1,15 +1,12 @@
-package com.example.whattodo.domain.models
+package com.example.whattodo.data.model.task
 
+import com.example.whattodo.domain.models.task.item.TaskPriority
 import java.time.LocalDateTime
 
-data class TaskItem(
-    val id: Long,
+data class CreateTaskItem(
     val title: String,
     val content: String,
     val parentListId: Long,
-    val isDone: Boolean,
-    val createdAt: LocalDateTime,
     val validUntil: LocalDateTime,
-    val isValid: Boolean,
     val priority: TaskPriority,
 )

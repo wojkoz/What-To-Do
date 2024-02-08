@@ -1,7 +1,8 @@
 package com.example.whattodo.data.mappers.task
 
 import com.example.whattodo.data.local.entities.todos.TaskListEntity
-import com.example.whattodo.domain.models.TaskList
+import com.example.whattodo.data.model.task.CreateTaskList
+import com.example.whattodo.domain.models.task.list.TaskList
 
 fun TaskList.toTaskListEntity(): TaskListEntity {
     return TaskListEntity(
@@ -23,5 +24,12 @@ fun TaskListEntity.toTaskList(
         allTasksCount = allTasksCount,
         todoTasksCount = todoTasksCount,
         isActive = this.isActive
+    )
+}
+
+fun CreateTaskList.toTaskListEntity(): TaskListEntity {
+    return TaskListEntity(
+        title = this.title,
+        isActive = this.isActive,
     )
 }
