@@ -37,5 +37,11 @@ object RepositoryModule {
     fun provideTaskItemRepository(taskItemDao: TaskItemDao): TaskItemRepository = TaskItemRepositoryImpl(taskItemDao)
 
     @Provides
-    fun provideTaskListRepository(taskListDao: TaskListDao): TasksListRepository = TaskListRepositoryImpl(taskListDao)
+    fun provideTaskListRepository(
+        taskListDao: TaskListDao,
+        taskItemDao: TaskItemDao,
+    ): TasksListRepository {
+        return TaskListRepositoryImpl(taskListDao, taskItemDao)
+    }
 }
+
