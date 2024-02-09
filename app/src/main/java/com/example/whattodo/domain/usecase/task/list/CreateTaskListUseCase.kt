@@ -7,10 +7,15 @@ class CreateTaskListUseCase(
     private val tasksListRepository: TasksListRepository,
 ) {
     suspend operator fun invoke(
-        isActive: Boolean,
+        setActive: Boolean,
         title: String,
     ) {
-        val createTaskList = CreateTaskList(isActive = isActive, title = title)
+        if (setActive) {
+            tasksListRepository.getActive()?.let {
+                tasksListRepository.insert(it.copy(isActive = false))
+            }
+        }
+        val createTaskList = CreateTaskList(isActive = setActive, title = title)
         tasksListRepository.insert(createTaskList)
     }
 }

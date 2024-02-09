@@ -43,6 +43,7 @@ fun ListChooser(
     currentList: TaskList?,
     options: List<TaskList>,
     onListSelect: ((TaskList) -> Unit),
+    onCreateNewListClick: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     var showListBottomSheet by remember {
@@ -62,7 +63,7 @@ fun ListChooser(
                 },
                 onCreateNewListClick = {
                     showListBottomSheet = false
-                    /*TODO navigate to list creator*/
+                    onCreateNewListClick.invoke()
                 }
             )
         }
@@ -74,7 +75,7 @@ fun ListChooser(
             horizontalArrangement = Arrangement.Center,
         ) {
             if (currentList == null) {
-                Button(onClick = { /*TODO navigate to list creator*/ }) {
+                Button(onClick = { onCreateNewListClick.invoke() }) {
                     Text(text = stringResource(id = string.list_chooser_create_list))
                 }
             } else {
@@ -155,7 +156,12 @@ private fun ListChooserBottomSheet(
 @Preview
 @Composable
 fun PreviewListChooserNullList() {
-    ListChooser(currentList = null, options = emptyList(), onListSelect = {})
+    ListChooser(
+        currentList = null,
+        options = emptyList(),
+        onListSelect = {},
+        onCreateNewListClick = {}
+    )
 }
 
 @Preview
@@ -164,6 +170,7 @@ fun PreviewListChooser() {
     ListChooser(
         currentList = TaskList(id = 0, title = "Default", isActive = true),
         options = emptyList(),
-        onListSelect = {}
+        onListSelect = {},
+        onCreateNewListClick = {},
     )
 }

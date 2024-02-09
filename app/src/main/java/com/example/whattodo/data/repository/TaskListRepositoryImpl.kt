@@ -27,12 +27,8 @@ class TaskListRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getActive(): Flow<DataResult<TaskList?>> {
-        return flow {
-            emit(DataResult.Loading)
-            val activeList = populateTaskList(taskListDao.getActive())
-            emit(DataResult.Success(activeList))
-        }
+    override suspend fun getActive(): TaskList? {
+        return populateTaskList(taskListDao.getActive())
     }
 
     override suspend fun insert(taskList: TaskList) {

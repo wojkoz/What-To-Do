@@ -3,4 +3,7 @@
   <string name="navigate_back">Navigate back</string>
   <string name="main_screen_title">Todos</string>
   <string name="list_chooser_create_list">Create new List</string>
+  <string name="title">Title</string>
+  <string name="set_active"> Set active</string>
+  <string name="apply">Apply</string>
 </resources>
