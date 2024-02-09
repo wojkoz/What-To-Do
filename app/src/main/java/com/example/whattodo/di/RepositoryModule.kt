@@ -12,14 +12,17 @@ import com.example.whattodo.domain.repository.todos.TasksListRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@InstallIn(Singleton::class)
+@InstallIn(SingletonComponent::class)
 @Module
 object RepositoryModule {
 
+    @Singleton
     @Provides
-    fun provideDatabase(context: Context): Database {
+    fun provideDatabase(@ApplicationContext context: Context): Database {
         return Room.databaseBuilder(
             context = context,
             name = "wtd-db",
@@ -33,9 +36,11 @@ object RepositoryModule {
     @Provides
     fun provideTaskItemDao(db: Database): TaskItemDao = db.taskItemDao()
 
+    @Singleton
     @Provides
     fun provideTaskItemRepository(taskItemDao: TaskItemDao): TaskItemRepository = TaskItemRepositoryImpl(taskItemDao)
 
+    @Singleton
     @Provides
     fun provideTaskListRepository(
         taskListDao: TaskListDao,

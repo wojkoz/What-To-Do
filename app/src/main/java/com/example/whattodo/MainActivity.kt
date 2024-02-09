@@ -24,7 +24,9 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Route.MAIN_SCREEN) {
-                        composable(Route.MAIN_SCREEN) { TodosScreen() }
+                        composable(Route.MAIN_SCREEN) {
+                            TodosScreen()
+                        }
                     }
                 }
             }

@@ -58,7 +58,7 @@ class TaskListRepositoryImpl @Inject constructor(
         return taskListEntity.toTaskList(
             todoTasksCount = todoTasksCount,
             allTasksCount = tasks.size,
-            doneTasksCount = doneTasksCount
+            doneTasksCount = doneTasksCount,
         )
     }
 }

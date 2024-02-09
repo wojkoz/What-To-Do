@@ -23,7 +23,7 @@ fun TaskListEntity.toTaskList(
         doneTasksCount = doneTasksCount,
         allTasksCount = allTasksCount,
         todoTasksCount = todoTasksCount,
-        isActive = this.isActive
+        isActive = this.isActive,
     )
 }
 
