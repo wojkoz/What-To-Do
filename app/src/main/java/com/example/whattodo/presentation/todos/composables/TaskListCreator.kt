@@ -82,7 +82,7 @@ fun TaskListCreator(
                         .clickable { if (!shouldForceSetActive) setActive = !setActive }
                 ) {
                     Checkbox(
-                        checked = if(shouldForceSetActive) true else setActive,
+                        checked = if (shouldForceSetActive) true else setActive,
                         onCheckedChange = { setActive = it }
                     )
                     Text(text = stringResource(id = string.set_active))
