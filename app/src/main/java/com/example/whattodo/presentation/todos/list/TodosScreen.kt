@@ -1,3 +1,5 @@
+package com.example.whattodo.presentation.todos.list
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,9 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.whattodo.R
-import com.example.whattodo.presentation.todos.TodosEvent.OnTaskListCreate
-import com.example.whattodo.presentation.todos.TodosEvent.OnTaskListSelect
-import com.example.whattodo.presentation.todos.TodosViewModel
+import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListCreate
+import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListSelect
 import com.example.whattodo.presentation.todos.composables.ListChooser
 import com.example.whattodo.presentation.todos.composables.TaskListCreator
 import com.example.whattodo.ui.composables.AppBar

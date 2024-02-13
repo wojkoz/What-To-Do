@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos
+package com.example.whattodo.presentation.todos.list
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -9,9 +9,9 @@ import com.example.whattodo.domain.repository.DataResult.Error
 import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
-import com.example.whattodo.presentation.todos.TodosEvent.OnTaskDone
-import com.example.whattodo.presentation.todos.TodosEvent.OnTaskListCreate
-import com.example.whattodo.presentation.todos.TodosEvent.OnTaskListSelect
+import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskDone
+import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListCreate
+import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListSelect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
