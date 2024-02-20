@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,10 +28,12 @@ import java.time.LocalDateTime
 fun TaskListView(
     title: String,
     items: List<TaskItem>,
+    onAddTaskClick: () -> Unit,
     modifier: Modifier = Modifier,
     titleBackgroundColor: Color = Color.White,
     titleTextColor: Color = Color.Black,
     backgroundColor: Color = Color.White,
+    showAddButton: Boolean = true,
 ) {
     Box(
         modifier = modifier
@@ -52,6 +58,19 @@ fun TaskListView(
                 TaskItemView(item = it)
                 Spacer(modifier = Modifier.height(6.dp))
             }
+
+            if (showAddButton) {
+                Box(
+                    contentAlignment = Alignment.BottomCenter,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
+                    FilledIconButton(onClick = onAddTaskClick) {
+                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Task")
+                    }
+                }
+            }
         }
     }
 }
@@ -61,6 +80,7 @@ fun TaskListView(
 fun PreviewTaskListView() {
     TaskListView(
         title = "Todo",
+        onAddTaskClick = {},
         items = listOf(
             TaskItem(
                 id = 0,

@@ -3,7 +3,22 @@
   <string name="navigate_back">Navigate back</string>
   <string name="main_screen_title">Todos</string>
   <string name="list_chooser_create_list">Create new List</string>
+  <string name="title_req">Title*</string>
   <string name="title">Title</string>
   <string name="set_active"> Set active</string>
   <string name="apply">Apply</string>
+  <string name="create_todo">Create Todo</string>
+  <string name="description">Description</string>
+  <string name="priority">Priority</string>
+  <string name="low">Low</string>
+  <string name="high">High</string>
+  <string name="details">Details</string>
+  <string name="valid_until">Valid until</string>
+  <string name="date">Date</string>
+  <string name="time">Time</string>
+  <string name="cancel"> Cancel</string>
+  <string name="todo_list">Todo</string>
+  <string name="done_list">Done</string>
+  <string name="edit_date">Edit date</string>
+  <string name="edit_time">Edit time</string>
 </resources>
