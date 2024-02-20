@@ -59,6 +59,7 @@ fun TodosCreateScreen(
     onEvent: (TodosCreateEvent) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
+    val borderShapeRoundPercent = 20
     val dateState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
     val timeState = rememberTimePickerState()
     var showDatePicker by remember { mutableStateOf(false) }
@@ -76,7 +77,10 @@ fun TodosCreateScreen(
                     IconButton(onClick = {
                         onEvent(OnCreateTask)
                     }) {
-                        Icon(imageVector = Icons.Filled.Done, contentDescription = stringResource(id = string.apply))
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = stringResource(id = string.apply)
+                        )
                     }
                 }
             )
@@ -89,11 +93,14 @@ fun TodosCreateScreen(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(20))
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(borderShapeRoundPercent)
+                    )
                     .padding(30.dp)
             ) {
                 Text(
@@ -126,7 +133,11 @@ fun TodosCreateScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(top = 20.dp)
-                    .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(20))
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(borderShapeRoundPercent)
+                    )
                     .padding(30.dp)
             ) {
                 Text(
@@ -187,7 +198,11 @@ fun TodosCreateScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(top = 20.dp)
-                    .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(20))
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(borderShapeRoundPercent)
+                    )
                     .padding(30.dp)
             ) {
                 Text(
