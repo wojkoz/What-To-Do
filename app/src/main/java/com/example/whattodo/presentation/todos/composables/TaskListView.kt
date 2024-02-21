@@ -1,6 +1,7 @@
 package com.example.whattodo.presentation.todos.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +29,7 @@ import java.time.LocalDateTime
 fun TaskListView(
     title: String,
     items: List<TaskItem>,
-    onAddTaskClick: () -> Unit,
+    onAddTaskClick: (taskId: Long?) -> Unit,
     modifier: Modifier = Modifier,
     titleBackgroundColor: Color = Color.White,
     titleTextColor: Color = Color.Black,
@@ -54,8 +55,10 @@ fun TaskListView(
                 fontSize = 24.sp
             )
 
-            items.map {
-                TaskItemView(item = it)
+            items.map { taskItem ->
+                Box(modifier = Modifier.clickable { onAddTaskClick(taskItem.id) }) {
+                    TaskItemView(item = taskItem)
+                }
                 Spacer(modifier = Modifier.height(6.dp))
             }
 
@@ -66,7 +69,9 @@ fun TaskListView(
                         .fillMaxWidth()
                         .padding(10.dp)
                 ) {
-                    FilledIconButton(onClick = onAddTaskClick) {
+                    FilledIconButton(onClick = {
+                        onAddTaskClick(null)
+                    }) {
                         Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Task")
                     }
                 }

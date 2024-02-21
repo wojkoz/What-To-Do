@@ -15,4 +15,7 @@ interface TaskItemDao {
 
     @Query("SELECT * FROM TaskItemEntity WHERE parent_list_id = :parentId")
     suspend fun getByParentId(parentId: Long): List<TaskItemEntity>
+
+    @Query("SELECT * FROm TaskItemEntity WHERE id = :id")
+    suspend fun getById(id: Long): TaskItemEntity?
 }

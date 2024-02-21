@@ -38,8 +38,13 @@ class MainActivity : ComponentActivity() {
                                 onEvent = { event ->
                                     viewModel.onEvent(event)
                                 },
-                                onNavigateToCreateTask = {
-                                    navController.navigate(route = Route.TODOS_CREATE_SCREEN)
+                                onNavigateToCreateTask = { parentListId, taskItemId ->
+                                    navController.navigate(
+                                        route = Route.passArgToTodosCreateScreen(
+                                            parentListId = parentListId,
+                                            taskId = taskItemId
+                                        )
+                                    )
                                 }
                             )
                         }
@@ -53,7 +58,8 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onNavigateBack = {
                                     navController.popBackStack()
-                                }
+                                },
+                                uiEvent = viewModel.uiEvent
                             )
                         }
                     }

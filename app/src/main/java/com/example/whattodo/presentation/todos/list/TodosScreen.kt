@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.whattodo.R
-import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListCreate
-import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListSelect
 import com.example.whattodo.presentation.todos.composables.ListChooser
 import com.example.whattodo.presentation.todos.composables.TaskListCreator
 import com.example.whattodo.presentation.todos.composables.TaskListView
+import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListCreate
+import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListSelect
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
 
@@ -26,7 +26,7 @@ import com.example.whattodo.ui.composables.CustomProgressIndicator
 fun TodosScreen(
     state: TodosState,
     onEvent: (TodosEvent) -> Unit,
-    onNavigateToCreateTask: () -> Unit,
+    onNavigateToCreateTask: (parentListId: Long, taskId: Long?) -> Unit,
 ) {
     var showCreateTaskListDialog by remember { mutableStateOf(false) }
     Scaffold(
@@ -53,7 +53,12 @@ fun TodosScreen(
                     TaskListView(
                         title = stringResource(id = R.string.todo_list),
                         items = state.todoTaskItemsList,
-                        onAddTaskClick = onNavigateToCreateTask
+                        onAddTaskClick = { taskItemId ->
+                            state.activeTaskList?.let { parentList ->
+                                onNavigateToCreateTask(parentList.id, taskItemId)
+
+                            }
+                        }
                     )
                 }
 
@@ -62,7 +67,7 @@ fun TodosScreen(
                     TaskListView(
                         title = stringResource(id = R.string.done_list),
                         items = state.doneTaskItemsList,
-                        onAddTaskClick = onNavigateToCreateTask,
+                        onAddTaskClick = {},
                         showAddButton = false,
                     )
                 }
@@ -90,7 +95,7 @@ fun TodosScreen(
 @Composable
 private fun MainScreenPreview() {
     TodosScreen(
-        onNavigateToCreateTask = {},
+        onNavigateToCreateTask = {_, _ ->},
         state = TodosState(),
         onEvent = {}
     )

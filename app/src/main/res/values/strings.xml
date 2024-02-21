@@ -7,6 +7,7 @@
   <string name="title">Title</string>
   <string name="set_active"> Set active</string>
   <string name="apply">Apply</string>
+  <string name="ok">OK</string>
   <string name="create_todo">Create Todo</string>
   <string name="description">Description</string>
   <string name="priority">Priority</string>
@@ -21,4 +22,7 @@
   <string name="done_list">Done</string>
   <string name="edit_date">Edit date</string>
   <string name="edit_time">Edit time</string>
+  <string name="this_field_is_required">This field is required!</string>
+  <string name="too_many_chars">Too many characters!</string>
+  <string name="oops_something_went_wrong">Oops… Something went wrong. Please check if your information\'s are correct.</string>
 </resources>

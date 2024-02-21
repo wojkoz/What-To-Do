@@ -44,7 +44,7 @@ class TodosViewModel @Inject constructor(
     private suspend fun loadAllTaskLists() {
         taskListUseCases.getAllTaskListUseCase().collect { result: DataResult<List<TaskList>> ->
             when (result) {
-                is Error -> onError(result.message)
+                is Error -> onError()
                 Loading -> onLoading()
                 is Success -> {
                     result.data?.let { data ->
@@ -82,7 +82,7 @@ class TodosViewModel @Inject constructor(
         }
     }
 
-    private fun onError(message: String) {
+    private fun onError() {
         _uiState.update { state -> state.copy(isLoading = false) }
     }
 

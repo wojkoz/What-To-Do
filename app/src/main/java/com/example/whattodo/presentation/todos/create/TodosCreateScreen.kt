@@ -1,16 +1,17 @@
 package com.example.whattodo.presentation.todos.create
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DateRange
@@ -27,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,11 +36,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation.Companion
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.whattodo.R.string
 import com.example.whattodo.domain.models.task.item.TaskPriority.High
 import com.example.whattodo.domain.models.task.item.TaskPriority.Low
@@ -49,14 +54,21 @@ import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnContent
 import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnCreateTask
 import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnPriorityChange
 import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnTitleChange
+import com.example.whattodo.presentation.todos.create.TodosCreateUiEvent.NavigateBack
+import com.example.whattodo.presentation.todos.create.TodosCreateUiEvent.ShowMessage
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
+import com.example.whattodo.ui.composables.ErrorDialog
+import com.example.whattodo.utils.UiText
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodosCreateScreen(
     state: TodosCreateState,
     onEvent: (TodosCreateEvent) -> Unit,
+    uiEvent: Flow<TodosCreateUiEvent>,
     onNavigateBack: () -> Unit,
 ) {
     val borderShapeRoundPercent = 20
@@ -64,6 +76,18 @@ fun TodosCreateScreen(
     val timeState = rememberTimePickerState()
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
+    var showMessage by remember { mutableStateOf<UiText?>(null) }
+    val localContext = LocalContext.current
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(key1 = true) {
+        uiEvent.collect {
+            when (it) {
+                is ShowMessage -> showMessage = it.message
+                NavigateBack -> onNavigateBack()
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -90,8 +114,11 @@ fun TodosCreateScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 20.dp)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -108,23 +135,42 @@ fun TodosCreateScreen(
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                     modifier = Modifier.padding(bottom = 15.dp)
                 )
-
-                // title tf max 80 chars
                 OutlinedTextField(
                     value = state.title,
-                    maxLines = 2,
+                    maxLines = 1,
                     label = { Text(text = stringResource(id = string.title_req)) },
                     onValueChange = {
                         onEvent(OnTitleChange(it))
                     },
+                    isError = state.titleError != null,
+                    supportingText = {
+                        val titleError = state.titleError
+                        if (titleError != null) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = titleError.asString(localContext),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                // content tf max 250 chars
                 OutlinedTextField(
                     value = state.content,
                     label = { Text(text = stringResource(id = string.description)) },
                     onValueChange = {
                         onEvent(OnContentChange(it))
+                    },
+                    isError = state.contentError != null,
+                    supportingText = {
+                        val contentError = state.contentError
+                        if (contentError != null) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = contentError.asString(localContext),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
                     }
                 )
             }
@@ -240,6 +286,14 @@ fun TodosCreateScreen(
             if (state.isLoading) {
                 CustomProgressIndicator()
             }
+
+            if (showMessage != null) {
+                ErrorDialog(
+                    onDismiss = { showMessage = null },
+                    onConfirm = { showMessage = null },
+                    message = showMessage!!,
+                )
+            }
         }
     }
 }
@@ -250,6 +304,7 @@ fun PreviewTodosCreateScreen() {
     TodosCreateScreen(
         onNavigateBack = {},
         state = TodosCreateState().copy(date = "25.05.2024", time = "12:00"),
-        onEvent = {}
+        onEvent = {},
+        uiEvent = flowOf()
     )
 }
