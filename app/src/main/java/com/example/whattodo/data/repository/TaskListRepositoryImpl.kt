@@ -3,6 +3,7 @@ package com.example.whattodo.data.repository
 import com.example.whattodo.data.local.entities.todos.TaskItemDao
 import com.example.whattodo.data.local.entities.todos.TaskListDao
 import com.example.whattodo.data.local.entities.todos.TaskListEntity
+import com.example.whattodo.data.mappers.task.toTaskItem
 import com.example.whattodo.data.mappers.task.toTaskList
 import com.example.whattodo.data.mappers.task.toTaskListEntity
 import com.example.whattodo.data.model.task.CreateTaskList
@@ -49,12 +50,14 @@ class TaskListRepositoryImpl @Inject constructor(
         }
 
         val tasks = taskItemDao.getByParentId(taskListEntity.id)
-        val todoTasksCount = tasks.count { task -> !task.isDone }
-        val doneTasksCount = tasks.size - todoTasksCount
+        val todoTasks = tasks.filter { task -> !task.isDone }
+        val doneTasks = tasks.filter {task -> task.isDone}
         return taskListEntity.toTaskList(
-            todoTasksCount = todoTasksCount,
+            todoTasksCount = todoTasks.size,
             allTasksCount = tasks.size,
-            doneTasksCount = doneTasksCount,
+            doneTasksCount = doneTasks.size,
+            doneTaskItems = doneTasks.map { it.toTaskItem() },
+            todoTaskItems = todoTasks.map { it.toTaskItem() }
         )
     }
 }

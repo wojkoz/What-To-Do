@@ -1,6 +1,5 @@
 package com.example.whattodo.presentation.todos.list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.whattodo.domain.models.task.list.TaskList
@@ -8,6 +7,7 @@ import com.example.whattodo.domain.repository.DataResult
 import com.example.whattodo.domain.repository.DataResult.Error
 import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
+import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
 import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskDone
 import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListCreate
@@ -22,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TodosViewModel @Inject constructor(
     private val taskListUseCases: TaskListUseCases,
+    private val taskItemUseCases: TaskItemUseCases,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<TodosState> = MutableStateFlow(TodosState())
@@ -50,9 +51,14 @@ class TodosViewModel @Inject constructor(
                     result.data?.let { data ->
                         val activeTaskList = data.find { it.isActive }
                         val taskLists = data.filterNot { it.isActive }
-                        Log.e("loadAllTaskLists", "$activeTaskList || $taskLists")
                         _uiState.update { state ->
-                            state.copy(isLoading = false, activeTaskList = activeTaskList, taskLists = taskLists)
+                            state.copy(
+                                isLoading = false,
+                                activeTaskList = activeTaskList,
+                                taskLists = taskLists,
+                                doneTaskItemsList = activeTaskList?.doneTasksItems.orEmpty(),
+                                todoTaskItemsList = activeTaskList?.todoTasksItems.orEmpty()
+                            )
                         }
                     }
                 }

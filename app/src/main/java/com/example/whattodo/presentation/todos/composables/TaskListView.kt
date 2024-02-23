@@ -1,19 +1,30 @@
 package com.example.whattodo.presentation.todos.composables
 
+import android.provider.CalendarContract.Colors
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +47,9 @@ fun TaskListView(
     backgroundColor: Color = Color.White,
     showAddButton: Boolean = true,
 ) {
+
+    var isExtended by remember { mutableStateOf(true) }
+
     Box(
         modifier = modifier
     ) {
@@ -44,35 +58,57 @@ fun TaskListView(
                 .fillMaxWidth()
                 .background(color = backgroundColor)
         ) {
-            Text(
-                text = title,
-                color = titleTextColor,
-                modifier = Modifier
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier
                     .fillMaxWidth()
-                    .padding(vertical = 6.dp)
-                    .background(color = titleBackgroundColor),
-                textAlign = TextAlign.Center,
-                fontSize = 24.sp
-            )
-
-            items.map { taskItem ->
-                Box(modifier = Modifier.clickable { onAddTaskClick(taskItem.id) }) {
-                    TaskItemView(item = taskItem)
+                    .clickable { isExtended = !isExtended }
+            ) {
+                Text(
+                    text = title,
+                    color = titleTextColor,
+                    modifier = Modifier
+                        .padding(vertical = 6.dp)
+                        .background(color = titleBackgroundColor),
+                    textAlign = TextAlign.Center,
+                    fontSize = 24.sp,
+                )
+                if (isExtended) {
+                    Image(
+                        imageVector = Filled.KeyboardArrowUp,
+                        contentDescription = "extend",
+                        )
+                } else {
+                    Image(
+                        imageVector = Filled.KeyboardArrowDown,
+                        contentDescription = "not extend",
+                        )
                 }
-                Spacer(modifier = Modifier.height(6.dp))
             }
 
-            if (showAddButton) {
-                Box(
-                    contentAlignment = Alignment.BottomCenter,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                ) {
-                    FilledIconButton(onClick = {
-                        onAddTaskClick(null)
-                    }) {
-                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Task")
+            if (isExtended) {
+                Column {
+                    items.forEach { taskItem ->
+                        Row(modifier = Modifier.clickable { onAddTaskClick(taskItem.id) }) {
+                            TaskItemView(item = taskItem)
+                            Spacer(modifier = Modifier.height(6.dp))
+                        }
+                    }
+                }
+
+                if (showAddButton) {
+                    Box(
+                        contentAlignment = Alignment.BottomCenter,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                    ) {
+                        FilledIconButton(onClick = {
+                            onAddTaskClick(null)
+                        }) {
+                            Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Task")
+                        }
                     }
                 }
             }

@@ -168,7 +168,13 @@ fun PreviewListChooserNullList() {
 @Composable
 fun PreviewListChooser() {
     ListChooser(
-        currentList = TaskList(id = 0, title = "Default", isActive = true),
+        currentList = TaskList(
+            id = 0,
+            title = "Default",
+            isActive = true,
+            doneTasksItems = listOf(),
+            todoTasksItems = listOf()
+        ),
         options = emptyList(),
         onListSelect = {},
         onCreateNewListClick = {},

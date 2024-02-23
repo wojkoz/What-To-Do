@@ -57,7 +57,7 @@ class TaskItemRepositoryImpl(private val taskItemDao: TaskItemDao) : TaskItemRep
 
     override suspend fun getById(id: Long): DataResult<TaskItem> {
         val item = taskItemDao.getById(id)?.toTaskItem()
-        return if(item == null) {
+        return if (item == null) {
             DataResult.Error(UiText.StringResource(R.string.oops_something_went_wrong))
         } else {
             DataResult.Success(item)
