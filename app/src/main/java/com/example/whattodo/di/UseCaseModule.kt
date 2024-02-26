@@ -6,7 +6,11 @@ import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
 import com.example.whattodo.domain.usecase.task.item.CreateTaskItemUseCase
 import com.example.whattodo.domain.usecase.task.item.GetByParentIdTaskItemUseCase
+import com.example.whattodo.domain.usecase.task.item.GetTaskItemByIdUseCase
 import com.example.whattodo.domain.usecase.task.item.InsertTaskItemUseCase
+import com.example.whattodo.domain.usecase.task.item.TaskDoneUseCase
+import com.example.whattodo.domain.usecase.task.item.TaskUnDoneUseCase
+import com.example.whattodo.domain.usecase.task.item.ValidateLengthUseCase
 import com.example.whattodo.domain.usecase.task.list.CreateTaskListUseCase
 import com.example.whattodo.domain.usecase.task.list.DeleteTaskListUseCase
 import com.example.whattodo.domain.usecase.task.list.GetActiveTaskListUseCase
@@ -38,6 +42,10 @@ object UseCaseModule {
             createTaskItemUseCase = CreateTaskItemUseCase(taskItemRepository),
             getByParentIdTaskItemUseCase = GetByParentIdTaskItemUseCase(taskItemRepository),
             insertTaskItemUseCase = InsertTaskItemUseCase(taskItemRepository),
+            validateLengthUseCase = ValidateLengthUseCase(),
+            getTaskItemByIdUseCase = GetTaskItemByIdUseCase(taskItemRepository),
+            taskDoneUseCase = TaskDoneUseCase(taskItemRepository),
+            taskUnDoneUseCase = TaskUnDoneUseCase(taskItemRepository),
         )
     }
 }

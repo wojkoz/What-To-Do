@@ -1,5 +1,7 @@
 package com.example.whattodo.domain.models.task.list
 
+import com.example.whattodo.domain.models.task.item.TaskItem
+
 /**
  * Represents a task list.
  *
@@ -16,4 +18,6 @@ data class TaskList(
     val allTasksCount: Int = 0,
     val todoTasksCount: Int = 0,
     val isActive: Boolean,
+    val doneTasksItems: List<TaskItem>,
+    val todoTasksItems: List<TaskItem>,
 )
