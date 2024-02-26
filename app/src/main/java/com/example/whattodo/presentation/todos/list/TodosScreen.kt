@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,8 +19,11 @@ import com.example.whattodo.R
 import com.example.whattodo.presentation.todos.composables.ListChooser
 import com.example.whattodo.presentation.todos.composables.TaskListCreator
 import com.example.whattodo.presentation.todos.composables.TaskListView
-import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListCreate
-import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListSelect
+import com.example.whattodo.presentation.todos.list.model.TodosEvent
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnScreenStarted
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListCreate
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListSelect
+import com.example.whattodo.presentation.todos.list.model.TodosState
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
 
@@ -30,6 +34,11 @@ fun TodosScreen(
     onNavigateToCreateTask: (parentListId: Long, taskId: Long?) -> Unit,
 ) {
     var showCreateTaskListDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = true) {
+        onEvent(OnScreenStarted)
+    }
+
     Scaffold(
         topBar = { AppBar(title = stringResource(id = R.string.main_screen_title), showBackIcon = false) },
         modifier = Modifier.fillMaxSize()
@@ -98,7 +107,7 @@ fun TodosScreen(
 @Composable
 private fun MainScreenPreview() {
     TodosScreen(
-        onNavigateToCreateTask = {_, _ ->},
+        onNavigateToCreateTask = { _, _ -> },
         state = TodosState(),
         onEvent = {}
     )

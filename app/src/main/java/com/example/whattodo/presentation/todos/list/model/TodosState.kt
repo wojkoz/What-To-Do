@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos.list
+package com.example.whattodo.presentation.todos.list.model
 
 import com.example.whattodo.domain.models.task.item.TaskItem
 import com.example.whattodo.domain.models.task.list.TaskList

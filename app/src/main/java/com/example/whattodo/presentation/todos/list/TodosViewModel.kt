@@ -9,9 +9,12 @@ import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
-import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskDone
-import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListCreate
-import com.example.whattodo.presentation.todos.list.TodosEvent.OnTaskListSelect
+import com.example.whattodo.presentation.todos.list.model.TodosEvent
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnScreenStarted
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskDone
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListCreate
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListSelect
+import com.example.whattodo.presentation.todos.list.model.TodosState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,9 +32,9 @@ class TodosViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            loadAllTaskLists()
-        }
+        // viewModelScope.launch {
+        //     loadAllTaskLists()
+        // }
     }
 
     fun onEvent(event: TodosEvent) {
@@ -39,6 +42,13 @@ class TodosViewModel @Inject constructor(
             is OnTaskDone -> {}
             is OnTaskListSelect -> onTaskListSelect(event.taskList)
             is OnTaskListCreate -> onTaskListCreate(event.title, event.setActive)
+            OnScreenStarted -> onScreenStarted()
+        }
+    }
+
+    private fun onScreenStarted() {
+        viewModelScope.launch {
+            loadAllTaskLists()
         }
     }
 

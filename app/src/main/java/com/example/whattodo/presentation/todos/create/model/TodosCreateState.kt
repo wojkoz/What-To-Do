@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos.create
+package com.example.whattodo.presentation.todos.create.model
 
 import com.example.whattodo.domain.models.task.item.TaskPriority
 import com.example.whattodo.utils.UiText

@@ -10,13 +10,16 @@ import com.example.whattodo.domain.repository.DataResult.Error
 import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
-import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnContentChange
-import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnCreateTask
-import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnDateTimeChange
-import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnPriorityChange
-import com.example.whattodo.presentation.todos.create.TodosCreateEvent.OnTitleChange
-import com.example.whattodo.presentation.todos.create.TodosCreateUiEvent.NavigateBack
-import com.example.whattodo.presentation.todos.create.TodosCreateUiEvent.ShowMessage
+import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnContentChange
+import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnCreateTask
+import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnDateTimeChange
+import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnPriorityChange
+import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnTitleChange
+import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent.NavigateBack
+import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent.ShowMessage
+import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent
+import com.example.whattodo.presentation.todos.create.model.TodosCreateState
+import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent
 import com.example.whattodo.utils.Route
 import com.example.whattodo.utils.UiText
 import com.example.whattodo.utils.extensions.getLocalDateFromMillis
@@ -29,7 +32,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -61,29 +63,7 @@ class TodosCreateViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             setTaskFromSavedStateHandle()
-            val item = taskItem
-            if (item != null) {
-                _uiState.update {
-                    it.copy(
-                        title = item.title,
-                        isLoading = false,
-                        time = item.validUntil.toStandardTime(),
-                        date = item.validUntil.toStandardDate(),
-                        priority = item.priority,
-                        validUntil = item.validUntil,
-                        content = item.content,
-                        contentError = null,
-                        titleError = null,
-                    )
-                }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        time = it.validUntil.toStandardTime(),
-                        date = it.validUntil.toStandardDate(),
-                    )
-                }
-            }
+            initializeState()
         }
     }
 
@@ -106,13 +86,28 @@ class TodosCreateViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isLoading = true)
             }
-            taskItemUseCases.createTaskItemUseCase(
-                title = _uiState.value.title,
-                content = _uiState.value.content,
-                parentListId = parentListId,
-                validUntil = _uiState.value.validUntil,
-                priority = _uiState.value.priority,
-            )
+
+            if(taskItem != null) {
+                val editedTaskItem = taskItem?.copy(
+                    title = _uiState.value.title,
+                    content = _uiState.value.content,
+                    parentListId = parentListId,
+                    validUntil = _uiState.value.validUntil,
+                    priority = _uiState.value.priority,
+                )
+                editedTaskItem?.let {
+                    taskItemUseCases.insertTaskItemUseCase(it)
+                }
+            } else {
+                taskItemUseCases.createTaskItemUseCase(
+                    title = _uiState.value.title,
+                    content = _uiState.value.content,
+                    parentListId = parentListId,
+                    validUntil = _uiState.value.validUntil,
+                    priority = _uiState.value.priority,
+                )
+            }
+
             _uiState.update {
                 it.copy(isLoading = false)
             }
@@ -198,6 +193,32 @@ class TodosCreateViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = true) }
                     taskItem = result.data
                 }
+            }
+        }
+    }
+
+    private fun initializeState() {
+        val item = taskItem
+        if (item != null) {
+            _uiState.update {
+                it.copy(
+                    title = item.title,
+                    isLoading = false,
+                    time = item.validUntil.toStandardTime(),
+                    date = item.validUntil.toStandardDate(),
+                    priority = item.priority,
+                    validUntil = item.validUntil,
+                    content = item.content,
+                    contentError = null,
+                    titleError = null,
+                )
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    time = it.validUntil.toStandardTime(),
+                    date = it.validUntil.toStandardDate(),
+                )
             }
         }
     }

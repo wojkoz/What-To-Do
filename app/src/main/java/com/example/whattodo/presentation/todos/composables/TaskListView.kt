@@ -1,6 +1,6 @@
 package com.example.whattodo.presentation.todos.composables
 
-import android.provider.CalendarContract.Colors
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -76,18 +76,19 @@ fun TaskListView(
                 )
                 if (isExtended) {
                     Image(
-                        imageVector = Filled.KeyboardArrowUp,
-                        contentDescription = "extend",
-                        )
+                        imageVector = Filled.KeyboardArrowDown,
+                        contentDescription = "extended",
+                    )
                 } else {
                     Image(
-                        imageVector = Filled.KeyboardArrowDown,
-                        contentDescription = "not extend",
-                        )
+                        imageVector = Filled.KeyboardArrowUp,
+                        contentDescription = "not extended",
+                    )
                 }
             }
 
-            if (isExtended) {
+
+            AnimatedVisibility(visible = isExtended) {
                 Column {
                     items.forEach { taskItem ->
                         Row(modifier = Modifier.clickable { onAddTaskClick(taskItem.id) }) {
@@ -95,19 +96,18 @@ fun TaskListView(
                             Spacer(modifier = Modifier.height(6.dp))
                         }
                     }
-                }
-
-                if (showAddButton) {
-                    Box(
-                        contentAlignment = Alignment.BottomCenter,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                    ) {
-                        FilledIconButton(onClick = {
-                            onAddTaskClick(null)
-                        }) {
-                            Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Task")
+                    if (showAddButton) {
+                        Box(
+                            contentAlignment = Alignment.BottomCenter,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp)
+                        ) {
+                            FilledIconButton(onClick = {
+                                onAddTaskClick(null)
+                            }) {
+                                Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Task")
+                            }
                         }
                     }
                 }
