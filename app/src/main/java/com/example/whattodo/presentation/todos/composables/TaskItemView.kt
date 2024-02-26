@@ -32,6 +32,7 @@ import java.time.LocalDateTime
 @Composable
 fun TaskItemView(
     item: TaskItem,
+    onCheckChange: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isChecked by remember { mutableStateOf(item.isDone) }
@@ -72,7 +73,8 @@ fun TaskItemView(
             Checkbox(
                 checked = isChecked,
                 onCheckedChange = {
-                    isChecked = it
+                    // isChecked = it
+                    onCheckChange()
                 },
                 modifier = Modifier
                     .size(30.dp)
@@ -103,7 +105,8 @@ fun PreviewTaskItemValidHighPriorityTodo() {
             parentListId = 0,
             priority = High,
             validUntil = LocalDateTime.now().plusDays(1)
-        )
+        ),
+        onCheckChange = {}
     )
 }
 
@@ -121,7 +124,8 @@ fun PreviewTaskItemNotValidLowPriorityTodo() {
             parentListId = 0,
             priority = Low,
             validUntil = LocalDateTime.now().minusDays(1)
-        )
+        ),
+        onCheckChange = {}
     )
 }
 
@@ -139,7 +143,8 @@ fun PreviewTaskItemNotValidHighPriorityTodo() {
             parentListId = 0,
             priority = High,
             validUntil = LocalDateTime.now().minusDays(1)
-        )
+        ),
+        onCheckChange = {}
     )
 }
 
@@ -157,7 +162,8 @@ fun PreviewTaskItemLowPriorityDone() {
             parentListId = 0,
             priority = Low,
             validUntil = LocalDateTime.now().minusDays(1)
-        )
+        ),
+        onCheckChange = {}
     )
 }
 

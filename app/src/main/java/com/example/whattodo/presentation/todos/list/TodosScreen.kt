@@ -16,13 +16,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.whattodo.R
+import com.example.whattodo.domain.models.task.item.TaskItem
 import com.example.whattodo.presentation.todos.composables.ListChooser
 import com.example.whattodo.presentation.todos.composables.TaskListCreator
 import com.example.whattodo.presentation.todos.composables.TaskListView
 import com.example.whattodo.presentation.todos.list.model.TodosEvent
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnScreenStarted
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskDone
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListCreate
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListSelect
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskUnDone
 import com.example.whattodo.presentation.todos.list.model.TodosState
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
@@ -69,6 +72,9 @@ fun TodosScreen(
 
                             }
                         },
+                        onTaskDone = { taskItem: TaskItem ->
+                            onEvent(OnTaskDone(taskItem))
+                        },
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
                 }
@@ -79,6 +85,9 @@ fun TodosScreen(
                         title = stringResource(id = R.string.done_list),
                         items = state.doneTaskItemsList,
                         onAddTaskClick = {},
+                        onTaskDone = { taskItem: TaskItem ->
+                            onEvent(OnTaskUnDone(taskItem))
+                        },
                         showAddButton = false,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )

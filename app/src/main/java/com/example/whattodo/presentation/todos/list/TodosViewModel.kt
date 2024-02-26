@@ -2,6 +2,8 @@ package com.example.whattodo.presentation.todos.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.whattodo.domain.models.SortBy
+import com.example.whattodo.domain.models.task.item.TaskItem
 import com.example.whattodo.domain.models.task.list.TaskList
 import com.example.whattodo.domain.repository.DataResult
 import com.example.whattodo.domain.repository.DataResult.Error
@@ -14,6 +16,7 @@ import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnScreenSta
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskDone
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListCreate
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListSelect
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskUnDone
 import com.example.whattodo.presentation.todos.list.model.TodosState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,18 +34,53 @@ class TodosViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<TodosState> = MutableStateFlow(TodosState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        // viewModelScope.launch {
-        //     loadAllTaskLists()
-        // }
-    }
+    private var sortBy: SortBy = SortBy.ValidDateDescending
 
     fun onEvent(event: TodosEvent) {
         when (event) {
-            is OnTaskDone -> {}
+            is OnTaskDone -> onTaskDone(event.taskItem)
             is OnTaskListSelect -> onTaskListSelect(event.taskList)
             is OnTaskListCreate -> onTaskListCreate(event.title, event.setActive)
             OnScreenStarted -> onScreenStarted()
+            is OnTaskUnDone -> onTaskUnDone(event.taskItem)
+        }
+    }
+
+    private fun onTaskUnDone(taskItem: TaskItem) {
+        viewModelScope.launch {
+            onLoading()
+            val undoneTaskItem = taskItemUseCases.taskUnDoneUseCase(taskItem)
+            val doneList = _uiState.value.doneTaskItemsList.filterNot {
+                it.id == undoneTaskItem.id
+            }
+            val todoList = _uiState.value.todoTaskItemsList.toMutableList()
+            todoList.add(undoneTaskItem)
+            _uiState.update { state ->
+                state.copy(
+                    todoTaskItemsList = todoList,
+                    doneTaskItemsList = doneList,
+                    isLoading = false,
+                )
+            }
+        }
+    }
+
+    private fun onTaskDone(taskItem: TaskItem) {
+        viewModelScope.launch {
+            onLoading()
+            val doneTaskItem = taskItemUseCases.taskDoneUseCase(taskItem)
+            val todoList = _uiState.value.todoTaskItemsList.filterNot {
+                it.id == doneTaskItem.id
+            }
+            val doneList = _uiState.value.doneTaskItemsList.toMutableList()
+            doneList.add(doneTaskItem)
+            _uiState.update { state ->
+                state.copy(
+                    todoTaskItemsList = todoList,
+                    doneTaskItemsList = doneList,
+                    isLoading = false,
+                )
+            }
         }
     }
 

@@ -41,6 +41,7 @@ fun TaskListView(
     title: String,
     items: List<TaskItem>,
     onAddTaskClick: (taskId: Long?) -> Unit,
+    onTaskDone: (taskItem: TaskItem) -> Unit,
     modifier: Modifier = Modifier,
     titleBackgroundColor: Color = Color.White,
     titleTextColor: Color = Color.Black,
@@ -92,7 +93,12 @@ fun TaskListView(
                 Column {
                     items.forEach { taskItem ->
                         Row(modifier = Modifier.clickable { onAddTaskClick(taskItem.id) }) {
-                            TaskItemView(item = taskItem)
+                            TaskItemView(
+                                item = taskItem,
+                                onCheckChange = {
+                                    onTaskDone(taskItem)
+                                }
+                            )
                             Spacer(modifier = Modifier.height(6.dp))
                         }
                     }
@@ -122,6 +128,7 @@ fun PreviewTaskListView() {
     TaskListView(
         title = "Todo",
         onAddTaskClick = {},
+        onTaskDone = {},
         items = listOf(
             TaskItem(
                 id = 0,
