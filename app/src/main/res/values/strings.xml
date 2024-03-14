@@ -25,4 +25,9 @@
   <string name="this_field_is_required">This field is required!</string>
   <string name="too_many_chars">Too many characters!</string>
   <string name="oops_something_went_wrong">Oops… Something went wrong. Please check if your information\'s are correct.</string>
+  <string name="sort_by">Sort by</string>
+  <string name="sort_by_creation_date_ascending">Create date asc</string>
+  <string name="sort_by_creation_date_descending">Create date desc</string>
+  <string name="sort_by_valid_date_ascending">Validation date asc</string>
+  <string name="sort_by_valid_date_descending">Validation date desc</string>
 </resources>

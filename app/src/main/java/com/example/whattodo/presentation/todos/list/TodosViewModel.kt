@@ -35,7 +35,7 @@ class TodosViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<TodosState> = MutableStateFlow(TodosState())
     val uiState = _uiState.asStateFlow()
 
-    private var _sortBy: SortBy = SortBy.ValidDateDescending
+    private var _sortBy: SortBy = SortBy.CreationDateDescending
 
     fun onEvent(event: TodosEvent) {
         when (event) {
@@ -51,6 +51,28 @@ class TodosViewModel @Inject constructor(
     private fun onSortChange(sortBy: SortBy) {
         viewModelScope.launch {
             _sortBy = sortBy
+            sortTasks(
+                todoTasks = _uiState.value.todoTaskItemsList,
+                doneTasks = _uiState.value.doneTaskItemsList,
+                sortBy = _sortBy
+            )
+        }
+    }
+
+    private fun sortTasks(
+        todoTasks: List<TaskItem>?,
+        doneTasks: List<TaskItem>?,
+        sortBy: SortBy,
+    ) {
+        _uiState.update { state ->
+            state.copy(
+                todoTaskItemsList = if (todoTasks != null) taskItemUseCases.sortTaskItemsUseCase(
+                    todoTasks, sortBy
+                ) else state.todoTaskItemsList,
+                doneTaskItemsList = if (doneTasks != null) taskItemUseCases.sortTaskItemsUseCase(
+                    doneTasks, sortBy
+                ) else state.doneTaskItemsList,
+            )
         }
     }
 
@@ -63,9 +85,13 @@ class TodosViewModel @Inject constructor(
             }
             val todoList = _uiState.value.todoTaskItemsList.toMutableList()
             todoList.add(undoneTaskItem)
+            sortTasks(
+                todoTasks = todoList,
+                doneTasks = null,
+                sortBy = _sortBy
+            )
             _uiState.update { state ->
                 state.copy(
-                    todoTaskItemsList = todoList,
                     doneTaskItemsList = doneList,
                     isLoading = false,
                 )
@@ -82,10 +108,14 @@ class TodosViewModel @Inject constructor(
             }
             val doneList = _uiState.value.doneTaskItemsList.toMutableList()
             doneList.add(doneTaskItem)
+            sortTasks(
+                todoTasks = null,
+                doneTasks = doneList,
+                sortBy = _sortBy
+            )
             _uiState.update { state ->
                 state.copy(
                     todoTaskItemsList = todoList,
-                    doneTaskItemsList = doneList,
                     isLoading = false,
                 )
             }
@@ -107,13 +137,16 @@ class TodosViewModel @Inject constructor(
                     result.data?.let { data ->
                         val activeTaskList = data.find { it.isActive }
                         val taskLists = data.filterNot { it.isActive }
+                        sortTasks(
+                            todoTasks = activeTaskList?.todoTasksItems.orEmpty(),
+                            doneTasks = activeTaskList?.doneTasksItems.orEmpty(),
+                            sortBy = _sortBy
+                        )
                         _uiState.update { state ->
                             state.copy(
                                 isLoading = false,
                                 activeTaskList = activeTaskList,
                                 taskLists = taskLists,
-                                doneTaskItemsList = activeTaskList?.doneTasksItems.orEmpty(),
-                                todoTaskItemsList = activeTaskList?.todoTasksItems.orEmpty()
                             )
                         }
                     }
