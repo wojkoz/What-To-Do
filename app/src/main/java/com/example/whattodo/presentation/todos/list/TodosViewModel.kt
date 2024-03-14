@@ -13,6 +13,7 @@ import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
 import com.example.whattodo.presentation.todos.list.model.TodosEvent
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnScreenStarted
+import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnSortChange
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskDone
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListCreate
 import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListSelect
@@ -34,7 +35,7 @@ class TodosViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<TodosState> = MutableStateFlow(TodosState())
     val uiState = _uiState.asStateFlow()
 
-    private var sortBy: SortBy = SortBy.ValidDateDescending
+    private var _sortBy: SortBy = SortBy.ValidDateDescending
 
     fun onEvent(event: TodosEvent) {
         when (event) {
@@ -43,6 +44,13 @@ class TodosViewModel @Inject constructor(
             is OnTaskListCreate -> onTaskListCreate(event.title, event.setActive)
             OnScreenStarted -> onScreenStarted()
             is OnTaskUnDone -> onTaskUnDone(event.taskItem)
+            is OnSortChange -> onSortChange(event.sortBy)
+        }
+    }
+
+    private fun onSortChange(sortBy: SortBy) {
+        viewModelScope.launch {
+            _sortBy = sortBy
         }
     }
 

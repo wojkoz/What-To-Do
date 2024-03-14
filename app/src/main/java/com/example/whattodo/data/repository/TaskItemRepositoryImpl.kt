@@ -8,10 +8,6 @@ import com.example.whattodo.data.model.task.CreateTaskItem
 import com.example.whattodo.domain.models.SortBy
 import com.example.whattodo.domain.models.SortBy.CreationDateAscending
 import com.example.whattodo.domain.models.SortBy.CreationDateDescending
-import com.example.whattodo.domain.models.SortBy.PriorityAscending
-import com.example.whattodo.domain.models.SortBy.PriorityDescending
-import com.example.whattodo.domain.models.SortBy.TitleAscending
-import com.example.whattodo.domain.models.SortBy.TitleDescending
 import com.example.whattodo.domain.models.SortBy.ValidDateAscending
 import com.example.whattodo.domain.models.SortBy.ValidDateDescending
 import com.example.whattodo.domain.models.task.item.TaskItem
@@ -44,10 +40,6 @@ class TaskItemRepositoryImpl(private val taskItemDao: TaskItemDao) : TaskItemRep
             val sortedTasks = when (sortBy) {
                 CreationDateAscending -> taskItems.sortedBy { it.createdAt }
                 CreationDateDescending -> taskItems.sortedByDescending { it.createdAt }
-                PriorityAscending -> taskItems.sortedBy { it.priority.priorityAsInt }
-                PriorityDescending -> taskItems.sortedByDescending { it.priority.priorityAsInt }
-                TitleAscending -> taskItems.sortedBy { it.title }
-                TitleDescending -> taskItems.sortedByDescending { it.title }
                 ValidDateAscending -> taskItems.sortedBy { it.validUntil }
                 ValidDateDescending -> taskItems.sortedByDescending { it.validUntil }
             }
