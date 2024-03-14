@@ -1,7 +1,7 @@
 package com.example.whattodo.data.repository
 
 import com.example.whattodo.R
-import com.example.whattodo.data.local.entities.todos.TaskItemDao
+import com.example.whattodo.data.local.entities.tasks.TaskItemDao
 import com.example.whattodo.data.mappers.task.toTaskItem
 import com.example.whattodo.data.mappers.task.toTaskItemEntity
 import com.example.whattodo.data.model.task.CreateTaskItem
@@ -12,7 +12,7 @@ import com.example.whattodo.domain.models.SortBy.ValidDateAscending
 import com.example.whattodo.domain.models.SortBy.ValidDateDescending
 import com.example.whattodo.domain.models.task.item.TaskItem
 import com.example.whattodo.domain.repository.DataResult
-import com.example.whattodo.domain.repository.todos.TaskItemRepository
+import com.example.whattodo.domain.repository.tasks.TaskItemRepository
 import com.example.whattodo.utils.UiText
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

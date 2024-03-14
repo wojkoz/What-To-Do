@@ -1,4 +1,4 @@
-package com.example.whattodo.data.local.entities.todos
+package com.example.whattodo.data.local.entities.tasks
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

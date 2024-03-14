@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos.composables
+package com.example.whattodo.presentation.tasks.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image

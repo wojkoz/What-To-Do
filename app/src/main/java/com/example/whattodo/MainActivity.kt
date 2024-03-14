@@ -13,10 +13,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.whattodo.presentation.todos.create.TodosCreateScreen
-import com.example.whattodo.presentation.todos.create.TodosCreateViewModel
-import com.example.whattodo.presentation.todos.list.TodosScreen
-import com.example.whattodo.presentation.todos.list.TodosViewModel
+import com.example.whattodo.presentation.tasks.create.TasksCreateScreen
+import com.example.whattodo.presentation.tasks.create.TasksCreateViewModel
+import com.example.whattodo.presentation.tasks.list.TasksScreen
+import com.example.whattodo.presentation.tasks.list.TasksViewModel
 import com.example.whattodo.ui.theme.WhatToDoTheme
 import com.example.whattodo.utils.Route
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,9 +31,9 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Route.MAIN_SCREEN) {
                         composable(Route.MAIN_SCREEN) {
-                            val viewModel: TodosViewModel = hiltViewModel()
+                            val viewModel: TasksViewModel = hiltViewModel()
                             val state by viewModel.uiState.collectAsStateWithLifecycle()
-                            TodosScreen(
+                            TasksScreen(
                                 state = state,
                                 onEvent = { event ->
                                     viewModel.onEvent(event)
@@ -49,9 +49,9 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(Route.TODOS_CREATE_SCREEN) {
-                            val viewModel: TodosCreateViewModel = hiltViewModel()
+                            val viewModel: TasksCreateViewModel = hiltViewModel()
                             val state by viewModel.uiState.collectAsStateWithLifecycle()
-                            TodosCreateScreen(
+                            TasksCreateScreen(
                                 state = state,
                                 onEvent = { event ->
                                     viewModel.onEvent(event)

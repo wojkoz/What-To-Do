@@ -1,7 +1,7 @@
 package com.example.whattodo.domain.usecase.task.list
 
 import com.example.whattodo.data.model.task.CreateTaskList
-import com.example.whattodo.domain.repository.todos.TasksListRepository
+import com.example.whattodo.domain.repository.tasks.TasksListRepository
 
 class CreateTaskListUseCase(
     private val tasksListRepository: TasksListRepository,

@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos.create
+package com.example.whattodo.presentation.tasks.create
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -42,18 +42,18 @@ import androidx.compose.ui.unit.dp
 import com.example.whattodo.R.string
 import com.example.whattodo.domain.models.task.item.TaskPriority.High
 import com.example.whattodo.domain.models.task.item.TaskPriority.Low
-import com.example.whattodo.presentation.todos.composables.CustomDatePickerDialog
-import com.example.whattodo.presentation.todos.composables.CustomTimePickerDialog
-import com.example.whattodo.presentation.todos.composables.ValidUntilField
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnContentChange
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnCreateTask
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnPriorityChange
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnTitleChange
-import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent.NavigateBack
-import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent.ShowMessage
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent
-import com.example.whattodo.presentation.todos.create.model.TodosCreateState
-import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent
+import com.example.whattodo.presentation.tasks.composables.CustomDatePickerDialog
+import com.example.whattodo.presentation.tasks.composables.CustomTimePickerDialog
+import com.example.whattodo.presentation.tasks.composables.ValidUntilField
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnContentChange
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnCreateTask
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnPriorityChange
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnTitleChange
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent.NavigateBack
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent.ShowMessage
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateState
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
 import com.example.whattodo.ui.composables.ErrorDialog
@@ -63,10 +63,10 @@ import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodosCreateScreen(
-    state: TodosCreateState,
-    onEvent: (TodosCreateEvent) -> Unit,
-    uiEvent: Flow<TodosCreateUiEvent>,
+fun TasksCreateScreen(
+    state: TasksCreateState,
+    onEvent: (TasksCreateEvent) -> Unit,
+    uiEvent: Flow<TasksCreateUiEvent>,
     onNavigateBack: () -> Unit,
 ) {
     val borderShapeRoundPercent = 20
@@ -210,7 +210,7 @@ fun TodosCreateScreen(
                         onConfirm = {
                             showDatePicker = false
                             onEvent(
-                                TodosCreateEvent.OnDateTimeChange(
+                                TasksCreateEvent.OnDateTimeChange(
                                     date = dateState.selectedDateMillis,
                                     hour = timeState.hour,
                                     minute = timeState.minute,
@@ -226,7 +226,7 @@ fun TodosCreateScreen(
                         onConfirm = {
                             showTimePicker = false
                             onEvent(
-                                TodosCreateEvent.OnDateTimeChange(
+                                TasksCreateEvent.OnDateTimeChange(
                                     date = dateState.selectedDateMillis,
                                     hour = timeState.hour,
                                     minute = timeState.minute,
@@ -299,9 +299,9 @@ fun TodosCreateScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewTodosCreateScreen() {
-    TodosCreateScreen(
+    TasksCreateScreen(
         onNavigateBack = {},
-        state = TodosCreateState().copy(date = "25.05.2024", time = "12:00"),
+        state = TasksCreateState().copy(date = "25.05.2024", time = "12:00"),
         onEvent = {},
         uiEvent = flowOf()
     )

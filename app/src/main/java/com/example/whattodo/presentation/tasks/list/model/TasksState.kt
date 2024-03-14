@@ -1,9 +1,9 @@
-package com.example.whattodo.presentation.todos.list.model
+package com.example.whattodo.presentation.tasks.list.model
 
 import com.example.whattodo.domain.models.task.item.TaskItem
 import com.example.whattodo.domain.models.task.list.TaskList
 
-data class TodosState(
+data class TasksState(
     val isLoading: Boolean = true,
     val taskLists: List<TaskList> = emptyList(),
     val activeTaskList: TaskList? = null,

@@ -1,7 +1,7 @@
 package com.example.whattodo.di
 
-import com.example.whattodo.domain.repository.todos.TaskItemRepository
-import com.example.whattodo.domain.repository.todos.TasksListRepository
+import com.example.whattodo.domain.repository.tasks.TaskItemRepository
+import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
 import com.example.whattodo.domain.usecase.task.item.CreateTaskItemUseCase

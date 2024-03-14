@@ -1,15 +1,15 @@
 package com.example.whattodo.data.repository
 
-import com.example.whattodo.data.local.entities.todos.TaskItemDao
-import com.example.whattodo.data.local.entities.todos.TaskListDao
-import com.example.whattodo.data.local.entities.todos.TaskListEntity
+import com.example.whattodo.data.local.entities.tasks.TaskItemDao
+import com.example.whattodo.data.local.entities.tasks.TaskListDao
+import com.example.whattodo.data.local.entities.tasks.TaskListEntity
 import com.example.whattodo.data.mappers.task.toTaskItem
 import com.example.whattodo.data.mappers.task.toTaskList
 import com.example.whattodo.data.mappers.task.toTaskListEntity
 import com.example.whattodo.data.model.task.CreateTaskList
 import com.example.whattodo.domain.models.task.list.TaskList
 import com.example.whattodo.domain.repository.DataResult
-import com.example.whattodo.domain.repository.todos.TasksListRepository
+import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

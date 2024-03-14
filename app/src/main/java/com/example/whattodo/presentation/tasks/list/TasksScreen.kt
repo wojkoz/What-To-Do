@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos.list
+package com.example.whattodo.presentation.tasks.list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,23 +25,23 @@ import androidx.compose.ui.unit.dp
 import com.example.whattodo.R
 import com.example.whattodo.domain.models.SortBy
 import com.example.whattodo.domain.models.task.item.TaskItem
-import com.example.whattodo.presentation.todos.composables.ListChooser
-import com.example.whattodo.presentation.todos.composables.TaskListCreator
-import com.example.whattodo.presentation.todos.composables.TaskListView
-import com.example.whattodo.presentation.todos.list.model.TodosEvent
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnScreenStarted
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskDone
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListCreate
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListSelect
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskUnDone
-import com.example.whattodo.presentation.todos.list.model.TodosState
+import com.example.whattodo.presentation.tasks.composables.ListChooser
+import com.example.whattodo.presentation.tasks.composables.TaskListCreator
+import com.example.whattodo.presentation.tasks.composables.TaskListView
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnScreenStarted
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskDone
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListCreate
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListSelect
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskUnDone
+import com.example.whattodo.presentation.tasks.list.model.TasksState
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
 
 @Composable
-fun TodosScreen(
-    state: TodosState,
-    onEvent: (TodosEvent) -> Unit,
+fun TasksScreen(
+    state: TasksState,
+    onEvent: (TasksEvent) -> Unit,
     onNavigateToCreateTask: (parentListId: Long, taskId: Long?) -> Unit,
 ) {
     var showCreateTaskListDialog by remember { mutableStateOf(false) }
@@ -71,28 +71,28 @@ fun TodosScreen(
                                        Text(text = stringResource(id = R.string.sort_by_creation_date_ascending))
                                 },
                                 onClick = {
-                                    onEvent(TodosEvent.OnSortChange(SortBy.CreationDateAscending))
+                                    onEvent(TasksEvent.OnSortChange(SortBy.CreationDateAscending))
                                     showSortByMenu = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text(text = stringResource(id = R.string.sort_by_creation_date_descending)) },
                                 onClick = {
-                                    onEvent(TodosEvent.OnSortChange(SortBy.CreationDateDescending))
+                                    onEvent(TasksEvent.OnSortChange(SortBy.CreationDateDescending))
                                     showSortByMenu = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text(text = stringResource(id = R.string.sort_by_valid_date_ascending)) },
                                 onClick = {
-                                    onEvent(TodosEvent.OnSortChange(SortBy.ValidDateAscending))
+                                    onEvent(TasksEvent.OnSortChange(SortBy.ValidDateAscending))
                                     showSortByMenu = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text(text = stringResource(id = R.string.sort_by_valid_date_descending)) },
                                 onClick = {
-                                    onEvent(TodosEvent.OnSortChange(SortBy.ValidDateDescending))
+                                    onEvent(TasksEvent.OnSortChange(SortBy.ValidDateDescending))
                                     showSortByMenu = false
                                 }
                             )
@@ -172,9 +172,9 @@ fun TodosScreen(
 @Preview(showBackground = true)
 @Composable
 private fun MainScreenPreview() {
-    TodosScreen(
+    TasksScreen(
         onNavigateToCreateTask = { _, _ -> },
-        state = TodosState(),
+        state = TasksState(),
         onEvent = {}
     )
 }

@@ -1,6 +1,6 @@
 package com.example.whattodo.data.mappers.task
 
-import com.example.whattodo.data.local.entities.todos.TaskItemEntity
+import com.example.whattodo.data.local.entities.tasks.TaskItemEntity
 import com.example.whattodo.data.model.task.CreateTaskItem
 import com.example.whattodo.domain.models.task.item.TaskItem
 import com.example.whattodo.domain.models.task.item.TaskPriority
