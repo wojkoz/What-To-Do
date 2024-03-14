@@ -4,7 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.whattodo.R
+import com.example.whattodo.domain.models.SortBy
 import com.example.whattodo.domain.models.task.item.TaskItem
 import com.example.whattodo.presentation.todos.composables.ListChooser
 import com.example.whattodo.presentation.todos.composables.TaskListCreator
@@ -37,13 +45,62 @@ fun TodosScreen(
     onNavigateToCreateTask: (parentListId: Long, taskId: Long?) -> Unit,
 ) {
     var showCreateTaskListDialog by remember { mutableStateOf(false) }
+    var showSortByMenu by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         onEvent(OnScreenStarted)
     }
 
     Scaffold(
-        topBar = { AppBar(title = stringResource(id = R.string.main_screen_title), showBackIcon = false) },
+        topBar = {
+            AppBar(
+                title = stringResource(id = R.string.main_screen_title),
+                showBackIcon = false,
+                actions = {
+                    IconButton(onClick = { showSortByMenu = !showSortByMenu }) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = stringResource(id = R.string.sort_by)
+                        )
+                        DropdownMenu(
+                            expanded = showSortByMenu,
+                            onDismissRequest = { showSortByMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                       Text(text = stringResource(id = R.string.sort_by_creation_date_ascending))
+                                },
+                                onClick = {
+                                    onEvent(TodosEvent.OnSortChange(SortBy.CreationDateAscending))
+                                    showSortByMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(id = R.string.sort_by_creation_date_descending)) },
+                                onClick = {
+                                    onEvent(TodosEvent.OnSortChange(SortBy.CreationDateDescending))
+                                    showSortByMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(id = R.string.sort_by_valid_date_ascending)) },
+                                onClick = {
+                                    onEvent(TodosEvent.OnSortChange(SortBy.ValidDateAscending))
+                                    showSortByMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(id = R.string.sort_by_valid_date_descending)) },
+                                onClick = {
+                                    onEvent(TodosEvent.OnSortChange(SortBy.ValidDateDescending))
+                                    showSortByMenu = false
+                                }
+                            )
+                        }
+                    }
+                }
+            )
+                 },
         modifier = Modifier.fillMaxSize()
     ) { padding ->
         Box {
