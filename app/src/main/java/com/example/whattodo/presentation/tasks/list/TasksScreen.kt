@@ -136,7 +136,9 @@ fun TasksScreen(
                         onTaskDone = { taskItem: TaskItem ->
                             onEvent(OnTaskDone(taskItem))
                         },
-                        modifier = Modifier.padding(horizontal = 10.dp)
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.background)
+                            .padding(horizontal = 10.dp)
                     )
                 }
 
@@ -150,7 +152,9 @@ fun TasksScreen(
                             onEvent(OnTaskUnDone(taskItem))
                         },
                         showAddButton = false,
-                        modifier = Modifier.padding(horizontal = 10.dp)
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.background)
+                            .padding(horizontal = 10.dp)
                     )
                 }
             }

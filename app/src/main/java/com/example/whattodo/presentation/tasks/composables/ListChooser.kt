@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons.Filled
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.Outlined
+import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -26,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.whattodo.R.string
 import com.example.whattodo.domain.models.task.list.TaskList
-import com.example.whattodo.ui.theme.Purple40
+import com.example.whattodo.ui.composables.ButtonText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +50,9 @@ fun ListChooser(
     var showListBottomSheet by remember {
         mutableStateOf(false)
     }
-    Box {
+    Box(
+        modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
+    ) {
         if (showListBottomSheet) {
             ListChooserBottomSheet(
                 sheetState = sheetState,
@@ -71,33 +74,34 @@ fun ListChooser(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.background)
                 .padding(6.dp),
             horizontalArrangement = Arrangement.Center,
         ) {
             if (currentList == null) {
-                Button(onClick = { onCreateNewListClick.invoke() }) {
-                    Text(text = stringResource(id = string.list_chooser_create_list))
+                Button(
+                    onClick = { onCreateNewListClick.invoke() }
+                ) {
+                    ButtonText(text = stringResource(id = string.list_chooser_create_list))
                 }
             } else {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .background(color = Purple40, shape = RoundedCornerShape(percent = 60))
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(percent = 60)
+                        )
                         .clickable {
                             showListBottomSheet = true
                         }
                         .padding(horizontal = 18.dp, vertical = 8.dp)
                 ) {
-                    Row {
-                        Text(
-                            text = currentList.title,
-                            fontSize = 16.sp,
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        Image(imageVector = Filled.ArrowDropDown, contentDescription = "Arrow")
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        ButtonText(text = currentList.title)
+                        Image(imageVector = Outlined.ArrowDropDown, contentDescription = "Arrow")
                     }
                 }
             }
@@ -131,7 +135,7 @@ private fun ListChooserBottomSheet(
                         .padding(vertical = 5.dp)
                 ) {
                     Button(onClick = onCreateNewListClick) {
-                        Text(text = stringResource(id = string.list_chooser_create_list))
+                        ButtonText(text = stringResource(id = string.list_chooser_create_list))
                     }
                 }
             }
@@ -153,7 +157,7 @@ private fun ListChooserBottomSheet(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PreviewListChooserNullList() {
     ListChooser(
@@ -164,7 +168,7 @@ fun PreviewListChooserNullList() {
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PreviewListChooser() {
     ListChooser(
