@@ -95,7 +95,11 @@ fun TaskListView(
             AnimatedVisibility(visible = isExtended) {
                 Column {
                     items.forEach { taskItem ->
-                        Row(modifier = Modifier.clickable { onAddTaskClick(taskItem.id) }) {
+                        Row(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp, horizontal = 6.dp)
+                            .clickable { onAddTaskClick(taskItem.id) }
+                        ) {
                             TaskItemView(
                                 item = taskItem,
                                 onCheckChange = {
