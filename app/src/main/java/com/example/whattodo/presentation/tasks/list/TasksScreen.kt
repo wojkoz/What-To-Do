@@ -2,7 +2,9 @@ package com.example.whattodo.presentation.tasks.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -114,6 +116,11 @@ fun TasksScreen(
                     .fillMaxSize()
                     .background(color = MaterialTheme.colorScheme.background)
             ) {
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+
                 item {
                     ListChooser(
                         currentList = state.activeTaskList,
@@ -121,6 +128,10 @@ fun TasksScreen(
                         onListSelect = { onEvent(OnTaskListSelect(it)) },
                         onCreateNewListClick = { showCreateTaskListDialog = true }
                     )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
 
                 item {
@@ -137,9 +148,11 @@ fun TasksScreen(
                             onEvent(OnTaskDone(taskItem))
                         },
                         modifier = Modifier
-                            .background(color = MaterialTheme.colorScheme.background)
                             .padding(horizontal = 10.dp)
                     )
+                }
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
 
                 item {
@@ -153,9 +166,12 @@ fun TasksScreen(
                         },
                         showAddButton = false,
                         modifier = Modifier
-                            .background(color = MaterialTheme.colorScheme.background)
                             .padding(horizontal = 10.dp)
                     )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
 

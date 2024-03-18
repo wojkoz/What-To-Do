@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,21 +46,20 @@ fun TaskListView(
     onAddTaskClick: (taskId: Long?) -> Unit,
     onTaskDone: (taskItem: TaskItem) -> Unit,
     modifier: Modifier = Modifier,
-    titleBackgroundColor: Color = Color.White,
-    titleTextColor: Color = Color.Black,
-    backgroundColor: Color = Color.White,
     showAddButton: Boolean = true,
 ) {
 
     var isExtended by remember { mutableStateOf(true) }
 
     Box(
-        modifier = modifier
+        modifier = modifier.background(
+            color = MaterialTheme.colorScheme.primaryContainer,
+            shape = RoundedCornerShape(percent = 10)
+        )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = backgroundColor)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -68,22 +70,23 @@ fun TaskListView(
             ) {
                 Text(
                     text = title,
-                    color = titleTextColor,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier
-                        .padding(vertical = 6.dp)
-                        .background(color = titleBackgroundColor),
+                        .padding(vertical = 6.dp),
                     textAlign = TextAlign.Center,
-                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.headlineMedium
                 )
                 if (isExtended) {
                     Image(
                         imageVector = Filled.KeyboardArrowDown,
                         contentDescription = "extended",
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimaryContainer),
                     )
                 } else {
                     Image(
                         imageVector = Filled.KeyboardArrowUp,
                         contentDescription = "not extended",
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimaryContainer),
                     )
                 }
             }
