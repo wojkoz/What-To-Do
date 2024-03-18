@@ -1,9 +1,13 @@
 package com.example.whattodo.presentation.tasks.create
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,15 +50,15 @@ import com.example.whattodo.domain.models.task.item.TaskPriority.Low
 import com.example.whattodo.presentation.tasks.composables.CustomDatePickerDialog
 import com.example.whattodo.presentation.tasks.composables.CustomTimePickerDialog
 import com.example.whattodo.presentation.tasks.composables.ValidUntilField
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent
 import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnContentChange
 import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnCreateTask
 import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnPriorityChange
 import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnTitleChange
-import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent.NavigateBack
-import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent.ShowMessage
-import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent
 import com.example.whattodo.presentation.tasks.create.model.TasksCreateState
 import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent.NavigateBack
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent.ShowMessage
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
 import com.example.whattodo.ui.composables.ErrorDialog
@@ -91,7 +96,7 @@ fun TasksCreateScreen(
         topBar = {
             AppBar(
                 title = stringResource(
-                    id = string.create_todo
+                    id = string.create_task
                 ),
                 showBackIcon = true,
                 onNavigateBack = onNavigateBack,
@@ -101,7 +106,8 @@ fun TasksCreateScreen(
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Done,
-                            contentDescription = stringResource(id = string.apply)
+                            contentDescription = stringResource(id = string.apply),
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -113,29 +119,25 @@ fun TasksCreateScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxWidth()
+                .fillMaxHeight()
+                .background(color = MaterialTheme.colorScheme.background)
                 .padding(horizontal = 20.dp)
-                .padding(bottom = 20.dp)
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color.Black,
-                        shape = RoundedCornerShape(borderShapeRoundPercent)
-                    )
-                    .padding(30.dp)
-            ) {
+            RoundedSectionLayout {
                 Text(
                     text = stringResource(id = string.details),
-                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    style = MaterialTheme.typography.headlineLarge,
                     modifier = Modifier.padding(bottom = 15.dp)
                 )
                 OutlinedTextField(
                     value = state.title,
                     maxLines = 1,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    ),
                     label = { Text(text = stringResource(id = string.title_req)) },
                     onValueChange = {
                         onEvent(OnTitleChange(it))
@@ -173,17 +175,7 @@ fun TasksCreateScreen(
                 )
             }
             // date time picker min date today
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Color.Black,
-                        shape = RoundedCornerShape(borderShapeRoundPercent)
-                    )
-                    .padding(30.dp)
-            ) {
+            RoundedSectionLayout {
                 Text(
                     text = stringResource(id = string.valid_until),
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
@@ -238,23 +230,17 @@ fun TasksCreateScreen(
                 }
             }
             // priority radio button (low, high)
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Color.Black,
-                        shape = RoundedCornerShape(borderShapeRoundPercent)
-                    )
-                    .padding(30.dp)
-            ) {
+            RoundedSectionLayout {
                 Text(
                     text = stringResource(id = string.priority),
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                 )
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp)
                 ) {
                     RadioButton(
                         selected = Low == state.priority,
@@ -267,7 +253,11 @@ fun TasksCreateScreen(
                     )
                 }
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp)
                 ) {
                     RadioButton(
                         selected = High == state.priority,
@@ -280,6 +270,7 @@ fun TasksCreateScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(20.dp))
 
             if (state.isLoading) {
                 CustomProgressIndicator()
@@ -293,6 +284,31 @@ fun TasksCreateScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun RoundedSectionLayout(
+    borderShapeRoundPercent: Int = 20,
+    content: @Composable (ColumnScope.() -> Unit),
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(top = 10.dp)
+            .border(
+                width = 1.dp,
+                color = Color.Black,
+                shape = RoundedCornerShape(borderShapeRoundPercent)
+            )
+            .background(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = RoundedCornerShape(borderShapeRoundPercent)
+            )
+            .padding(30.dp)
+            .fillMaxWidth()
+    ) {
+        content()
     }
 }
 
