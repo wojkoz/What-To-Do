@@ -1,10 +1,10 @@
-package com.example.whattodo.presentation.todos.create.model
+package com.example.whattodo.presentation.tasks.create.model
 
 import com.example.whattodo.domain.models.task.item.TaskPriority
 import com.example.whattodo.utils.UiText
 import java.time.LocalDateTime
 
-data class TodosCreateState(
+data class TasksCreateState(
     val title: String = "",
     val content: String = "",
     val validUntil: LocalDateTime = LocalDateTime.now().plusDays(1),

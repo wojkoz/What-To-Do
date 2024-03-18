@@ -1,4 +1,4 @@
-package com.example.whattodo.domain.repository.todos
+package com.example.whattodo.domain.repository.tasks
 
 import com.example.whattodo.data.model.task.CreateTaskItem
 import com.example.whattodo.domain.models.SortBy

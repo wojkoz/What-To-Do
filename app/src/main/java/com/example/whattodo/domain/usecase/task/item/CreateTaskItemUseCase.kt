@@ -2,7 +2,7 @@ package com.example.whattodo.domain.usecase.task.item
 
 import com.example.whattodo.data.model.task.CreateTaskItem
 import com.example.whattodo.domain.models.task.item.TaskPriority
-import com.example.whattodo.domain.repository.todos.TaskItemRepository
+import com.example.whattodo.domain.repository.tasks.TaskItemRepository
 import java.time.LocalDateTime
 
 class CreateTaskItemUseCase(

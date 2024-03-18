@@ -1,4 +1,4 @@
-package com.example.whattodo.data.local.entities.todos
+package com.example.whattodo.data.local.entities.tasks
 
 import androidx.room.Dao
 import androidx.room.Delete

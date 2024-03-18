@@ -3,12 +3,12 @@ package com.example.whattodo.di
 import android.content.Context
 import androidx.room.Room
 import com.example.whattodo.data.local.db.Database
-import com.example.whattodo.data.local.entities.todos.TaskItemDao
-import com.example.whattodo.data.local.entities.todos.TaskListDao
+import com.example.whattodo.data.local.entities.tasks.TaskItemDao
+import com.example.whattodo.data.local.entities.tasks.TaskListDao
 import com.example.whattodo.data.repository.TaskItemRepositoryImpl
 import com.example.whattodo.data.repository.TaskListRepositoryImpl
-import com.example.whattodo.domain.repository.todos.TaskItemRepository
-import com.example.whattodo.domain.repository.todos.TasksListRepository
+import com.example.whattodo.domain.repository.tasks.TaskItemRepository
+import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

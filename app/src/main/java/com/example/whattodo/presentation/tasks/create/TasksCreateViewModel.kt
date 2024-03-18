@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos.create
+package com.example.whattodo.presentation.tasks.create
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,16 +10,16 @@ import com.example.whattodo.domain.repository.DataResult.Error
 import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnContentChange
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnCreateTask
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnDateTimeChange
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnPriorityChange
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent.OnTitleChange
-import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent.NavigateBack
-import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent.ShowMessage
-import com.example.whattodo.presentation.todos.create.model.TodosCreateEvent
-import com.example.whattodo.presentation.todos.create.model.TodosCreateState
-import com.example.whattodo.presentation.todos.create.model.TodosCreateUiEvent
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnContentChange
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnCreateTask
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnDateTimeChange
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnPriorityChange
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent.OnTitleChange
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent.NavigateBack
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent.ShowMessage
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateEvent
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateState
+import com.example.whattodo.presentation.tasks.create.model.TasksCreateUiEvent
 import com.example.whattodo.utils.Route
 import com.example.whattodo.utils.UiText
 import com.example.whattodo.utils.extensions.getLocalDateFromMillis
@@ -38,7 +38,7 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
-class TodosCreateViewModel @Inject constructor(
+class TasksCreateViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val taskItemUseCases: TaskItemUseCases,
 ) : ViewModel() {
@@ -54,10 +54,10 @@ class TodosCreateViewModel @Inject constructor(
 
     private var taskItem: TaskItem? = null
 
-    private val _uiEvent = Channel<TodosCreateUiEvent>()
+    private val _uiEvent = Channel<TasksCreateUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    private val _uiState = MutableStateFlow(TodosCreateState())
+    private val _uiState = MutableStateFlow(TasksCreateState())
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -67,7 +67,7 @@ class TodosCreateViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: TodosCreateEvent) {
+    fun onEvent(event: TasksCreateEvent) {
         when (event) {
             OnCreateTask -> onCreateTask()
             is OnContentChange -> onContentChange(event.content)

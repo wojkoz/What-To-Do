@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos.list
+package com.example.whattodo.presentation.tasks.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,14 +11,14 @@ import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
-import com.example.whattodo.presentation.todos.list.model.TodosEvent
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnScreenStarted
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnSortChange
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskDone
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListCreate
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskListSelect
-import com.example.whattodo.presentation.todos.list.model.TodosEvent.OnTaskUnDone
-import com.example.whattodo.presentation.todos.list.model.TodosState
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnScreenStarted
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnSortChange
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskDone
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListCreate
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListSelect
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskUnDone
+import com.example.whattodo.presentation.tasks.list.model.TasksState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,17 +27,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TodosViewModel @Inject constructor(
+class TasksViewModel @Inject constructor(
     private val taskListUseCases: TaskListUseCases,
     private val taskItemUseCases: TaskItemUseCases,
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<TodosState> = MutableStateFlow(TodosState())
+    private val _uiState: MutableStateFlow<TasksState> = MutableStateFlow(TasksState())
     val uiState = _uiState.asStateFlow()
 
     private var _sortBy: SortBy = SortBy.CreationDateDescending
 
-    fun onEvent(event: TodosEvent) {
+    fun onEvent(event: TasksEvent) {
         when (event) {
             is OnTaskDone -> onTaskDone(event.taskItem)
             is OnTaskListSelect -> onTaskListSelect(event.taskList)

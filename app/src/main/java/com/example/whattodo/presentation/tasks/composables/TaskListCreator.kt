@@ -1,4 +1,4 @@
-package com.example.whattodo.presentation.todos.composables
+package com.example.whattodo.presentation.tasks.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

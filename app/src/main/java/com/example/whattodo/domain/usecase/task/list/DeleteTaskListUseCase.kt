@@ -1,7 +1,7 @@
 package com.example.whattodo.domain.usecase.task.list
 
 import com.example.whattodo.domain.models.task.list.TaskList
-import com.example.whattodo.domain.repository.todos.TasksListRepository
+import com.example.whattodo.domain.repository.tasks.TasksListRepository
 
 class DeleteTaskListUseCase(
     private val tasksListRepository: TasksListRepository,
