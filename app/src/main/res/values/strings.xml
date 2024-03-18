@@ -30,4 +30,5 @@
   <string name="sort_by_creation_date_descending">Create date desc</string>
   <string name="sort_by_valid_date_ascending">Validation date asc</string>
   <string name="sort_by_valid_date_descending">Validation date desc</string>
+  <string name="list_creator_label">Length should be between 1 and 80 chars.</string>
 </resources>
