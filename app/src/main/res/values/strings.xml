@@ -31,4 +31,8 @@
   <string name="sort_by_valid_date_ascending">Validation date asc</string>
   <string name="sort_by_valid_date_descending">Validation date desc</string>
   <string name="list_creator_label">Length should be between 1 and 80 chars.</string>
+  <string name="export_tasks">Export tasks</string>
+  <string name="choose_import_or_export_tasks">Choose if You want to export or import tasks.</string>
+  <string name="import_db">Import</string>
+  <string name="export_db">Export</string>
 </resources>

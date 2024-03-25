@@ -61,6 +61,44 @@ fun ErrorDialog(
     }
 }
 
+@Composable
+fun ExportOrImportTasksDialog(
+    onDismiss: () -> Unit,
+    onExport: () -> Unit,
+    onImport: () -> Unit,
+) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Column(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(id = string.choose_import_or_export_tasks),
+                fontSize = 16.sp,
+                modifier = Modifier.padding(10.dp)
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, top = 30.dp, end = 20.dp, bottom = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = { onImport.invoke() },
+                ) {
+                    Text(text = stringResource(id = string.import_db))
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Button(
+                    onClick = { onExport.invoke() },
+                ) {
+                    Text(text = stringResource(id = string.export_db))
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewErrorDialog() {
@@ -68,5 +106,15 @@ fun PreviewErrorDialog() {
         onDismiss = {},
         onConfirm = {},
         message = UiText.StringResource(string.oops_something_went_wrong)
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewExportOrImportTasksDialog() {
+    ExportOrImportTasksDialog(
+        onDismiss = {},
+        onExport = {},
+        onImport = {},
     )
 }

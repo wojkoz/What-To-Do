@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -23,8 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +42,7 @@ import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskUnDon
 import com.example.whattodo.presentation.tasks.list.model.TasksState
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
+import com.example.whattodo.ui.composables.ExportOrImportTasksDialog
 
 @Composable
 fun TasksScreen(
@@ -52,6 +52,7 @@ fun TasksScreen(
 ) {
     var showCreateTaskListDialog by remember { mutableStateOf(false) }
     var showSortByMenu by remember { mutableStateOf(false) }
+    var showImportOrExportDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         onEvent(OnScreenStarted)
@@ -63,6 +64,13 @@ fun TasksScreen(
                 title = stringResource(id = R.string.main_screen_title),
                 showBackIcon = false,
                 actions = {
+                    IconButton(onClick = { showImportOrExportDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.Share,
+                            contentDescription = stringResource(id = R.string.export_tasks),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
                     IconButton(onClick = { showSortByMenu = !showSortByMenu }) {
                         Icon(
                             imageVector = Icons.Filled.MoreVert,
@@ -74,7 +82,7 @@ fun TasksScreen(
                         ) {
                             DropdownMenuItem(
                                 text = {
-                                       Text(text = stringResource(id = R.string.sort_by_creation_date_ascending))
+                                    Text(text = stringResource(id = R.string.sort_by_creation_date_ascending))
                                 },
                                 onClick = {
                                     onEvent(TasksEvent.OnSortChange(SortBy.CreationDateAscending))
@@ -106,7 +114,7 @@ fun TasksScreen(
                     }
                 }
             )
-                 },
+        },
         modifier = Modifier.fillMaxSize()
     ) { padding ->
         Box {
@@ -116,7 +124,6 @@ fun TasksScreen(
                     .fillMaxSize()
                     .background(color = MaterialTheme.colorScheme.background)
             ) {
-
                 item {
                     Spacer(modifier = Modifier.height(20.dp))
                 }
@@ -183,6 +190,14 @@ fun TasksScreen(
                         onEvent(OnTaskListCreate(title, setActive))
                     },
                     shouldForceSetActive = state.activeTaskList == null
+                )
+            }
+
+            if (showImportOrExportDialog) {
+                ExportOrImportTasksDialog(
+                    onImport = { onEvent(TasksEvent.OnImportTasksClick) },
+                    onExport = { onEvent(TasksEvent.OnExportTasksClick) },
+                    onDismiss = { showImportOrExportDialog = false },
                 )
             }
 

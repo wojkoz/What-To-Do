@@ -11,4 +11,6 @@ sealed class TasksEvent {
     data class OnTaskListCreate(val title: String, val setActive: Boolean) : TasksEvent()
     data object OnScreenStarted : TasksEvent()
     data class OnSortChange(val sortBy: SortBy) : TasksEvent()
+    data object OnExportTasksClick : TasksEvent()
+    data object OnImportTasksClick : TasksEvent()
 }

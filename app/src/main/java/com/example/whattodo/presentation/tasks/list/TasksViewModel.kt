@@ -12,6 +12,8 @@ import com.example.whattodo.domain.repository.DataResult.Success
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnExportTasksClick
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnImportTasksClick
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnScreenStarted
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnSortChange
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskDone
@@ -45,6 +47,8 @@ class TasksViewModel @Inject constructor(
             OnScreenStarted -> onScreenStarted()
             is OnTaskUnDone -> onTaskUnDone(event.taskItem)
             is OnSortChange -> onSortChange(event.sortBy)
+            OnExportTasksClick -> TODO()
+            OnImportTasksClick -> TODO()
         }
     }
 
