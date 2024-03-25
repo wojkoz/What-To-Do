@@ -35,4 +35,5 @@
   <string name="choose_import_or_export_tasks">Choose if You want to export or import tasks.</string>
   <string name="import_db">Import</string>
   <string name="export_db">Export</string>
+  <string name="successfully_exported_file">Successfully exported file.</string>
 </resources>

@@ -1,5 +1,8 @@
 package com.example.whattodo.presentation.tasks.list
 
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,22 +44,63 @@ import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListC
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListSelect
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskUnDone
 import com.example.whattodo.presentation.tasks.list.model.TasksState
+import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents
+import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents.OpenFileSaveDialog
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
 import com.example.whattodo.ui.composables.ExportOrImportTasksDialog
+import com.example.whattodo.utils.files.alterDocument
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun TasksScreen(
     state: TasksState,
     onEvent: (TasksEvent) -> Unit,
     onNavigateToCreateTask: (parentListId: Long, taskId: Long?) -> Unit,
+    onUiEvent: Flow<TasksUiEvents>,
 ) {
     var showCreateTaskListDialog by remember { mutableStateOf(false) }
     var showSortByMenu by remember { mutableStateOf(false) }
     var showImportOrExportDialog by remember { mutableStateOf(false) }
+    var json: String? by remember {
+        mutableStateOf(null)
+    }
+    val context = LocalContext.current
+    val fileSaveLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json")
+    ) {
+        it?.let { uri ->
+            alterDocument(
+                uri = uri,
+                context = context,
+                json = json ?: "",
+                onError = { errorText ->
+                    showImportOrExportDialog = false
+                    Toast.makeText(context, errorText, Toast.LENGTH_LONG).show()
+                },
+                onSuccess = {
+                    showImportOrExportDialog = false
+                    Toast.makeText(context, R.string.successfully_exported_file, Toast.LENGTH_LONG).show()
+                }
+            )
+            json = null
+        }
+    }
 
     LaunchedEffect(key1 = true) {
         onEvent(OnScreenStarted)
+    }
+
+    LaunchedEffect(key1 = true) {
+        onUiEvent.collect { event ->
+            when (event) {
+                is OpenFileSaveDialog -> {
+                    json = event.json
+                    fileSaveLauncher.launch("db.json")
+                }
+            }
+        }
     }
 
     Scaffold(
@@ -214,6 +259,7 @@ private fun MainScreenPreview() {
     TasksScreen(
         onNavigateToCreateTask = { _, _ -> },
         state = TasksState(),
-        onEvent = {}
+        onEvent = {},
+        onUiEvent = flow { },
     )
 }

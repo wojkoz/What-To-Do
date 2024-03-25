@@ -1,6 +1,7 @@
 package com.example.whattodo.domain.models.task.list
 
 import com.example.whattodo.domain.models.task.item.TaskItem
+import kotlinx.serialization.Serializable
 
 /**
  * Represents a task list.
@@ -11,6 +12,7 @@ import com.example.whattodo.domain.models.task.item.TaskItem
  * @property allTasksCount The total number of tasks in the task list. Defaults to 0.
  * @property todoTasksCount The number of tasks that are yet to be done in the task list. Defaults to 0.
  */
+@Serializable
 data class TaskList(
     val id: Long,
     val title: String,

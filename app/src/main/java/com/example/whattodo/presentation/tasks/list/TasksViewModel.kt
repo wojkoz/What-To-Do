@@ -21,11 +21,16 @@ import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListC
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListSelect
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskUnDone
 import com.example.whattodo.presentation.tasks.list.model.TasksState
+import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +38,9 @@ class TasksViewModel @Inject constructor(
     private val taskListUseCases: TaskListUseCases,
     private val taskItemUseCases: TaskItemUseCases,
 ) : ViewModel() {
+
+    private val _uiEvent = Channel<TasksUiEvents>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     private val _uiState: MutableStateFlow<TasksState> = MutableStateFlow(TasksState())
     val uiState = _uiState.asStateFlow()
@@ -47,8 +55,25 @@ class TasksViewModel @Inject constructor(
             OnScreenStarted -> onScreenStarted()
             is OnTaskUnDone -> onTaskUnDone(event.taskItem)
             is OnSortChange -> onSortChange(event.sortBy)
-            OnExportTasksClick -> TODO()
+            OnExportTasksClick -> onExportTasks()
             OnImportTasksClick -> TODO()
+        }
+    }
+
+    private fun onExportTasks() {
+        viewModelScope.launch {
+            taskListUseCases.getAllTaskListUseCase().collect { result ->
+                when (result) {
+                    is Error -> onError()
+                    Loading -> onLoading()
+                    is Success -> {
+                        result.data?.let {
+                            val json = Json.encodeToString(it)
+                            _uiEvent.send(TasksUiEvents.OpenFileSaveDialog(json))
+                        }
+                    }
+                }
+            }
         }
     }
 
