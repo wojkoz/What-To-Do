@@ -31,4 +31,14 @@
   <string name="sort_by_valid_date_ascending">Validation date asc</string>
   <string name="sort_by_valid_date_descending">Validation date desc</string>
   <string name="list_creator_label">Length should be between 1 and 80 chars.</string>
+  <string name="export_tasks">Export tasks</string>
+  <string name="choose_import_or_export_tasks">Choose if You want to export or import tasks.</string>
+  <string name="import_db">Import</string>
+  <string name="export_db">Export</string>
+  <string name="successfully_exported_file">Successfully exported file.</string>
+  <string name="clear_db_and_add">Clear all tasks and add imported items</string>
+  <string name="add_tasks_as_new">Add imported tasks</string>
+  <string name="choose_import_settings">Choose import settings</string>
+  <string name="error_could_not_parse_file">File could not be parsed!</string>
+  <string name="error_could_not_deserialize_json">Json could not be deserialized!</string>
 </resources>

@@ -18,4 +18,10 @@ interface TaskItemDao {
 
     @Query("SELECT * FROm TaskItemEntity WHERE id = :id")
     suspend fun getById(id: Long): TaskItemEntity?
+
+    @Query("DELETE FROM TaskItemEntity")
+    suspend fun clearDb()
+
+    @Upsert
+    suspend fun upsertAll(items: List<TaskItemEntity>)
 }

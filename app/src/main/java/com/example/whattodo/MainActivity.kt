@@ -45,7 +45,8 @@ class MainActivity : ComponentActivity() {
                                             taskId = taskItemId
                                         )
                                     )
-                                }
+                                },
+                                onUiEvent = viewModel.uiEvent
                             )
                         }
                         composable(Route.TODOS_CREATE_SCREEN) {

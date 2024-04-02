@@ -9,12 +9,12 @@ import java.time.format.DateTimeFormatter
 
 private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-fun TaskItem.toTaskItemEntity(): TaskItemEntity {
+fun TaskItem.toTaskItemEntity(parentListId: Long? = null): TaskItemEntity {
     return TaskItemEntity(
         id = this.id,
         title = this.title,
         content = this.content,
-        parentListId = this.parentListId,
+        parentListId = parentListId ?: this.parentListId,
         isDone = this.isDone,
         createdAt = this.createdAt.format(formatter),
         validUntil = this.validUntil.format(formatter),
@@ -45,6 +45,18 @@ fun CreateTaskItem.toTaskItemEntity(): TaskItemEntity {
         content = this.content,
         parentListId = this.parentListId,
         isDone = false,
+        createdAt = LocalDateTime.now().format(formatter),
+        validUntil = this.validUntil.format(formatter),
+        priority = this.priority.priorityAsInt,
+    )
+}
+
+fun TaskItem.toTaskItemEntityAsNew(parentListId: Long): TaskItemEntity {
+    return TaskItemEntity(
+        title = this.title,
+        content = this.content,
+        parentListId = parentListId,
+        isDone = this.isDone,
         createdAt = LocalDateTime.now().format(formatter),
         validUntil = this.validUntil.format(formatter),
         priority = this.priority.priorityAsInt,

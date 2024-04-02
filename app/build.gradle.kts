@@ -4,6 +4,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("io.gitlab.arturbosch.detekt").version("1.23.4")
+    kotlin("plugin.serialization") version "1.9.23"
     kotlin("kapt")
 }
 
@@ -96,8 +97,8 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 
-    //Moshi
-    implementation("com.squareup.moshi:moshi:1.14.0")
+    // Serializable
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     //Hilt
     implementation("com.google.dagger:hilt-android:2.50")
@@ -106,6 +107,9 @@ dependencies {
 
     //Detekt rules
     detektPlugins("io.nlopez.compose.rules:detekt:0.3.3")
+
+    // Timber
+    implementation("com.jakewharton.timber:timber:5.0.1")
 }
 
 kapt {
