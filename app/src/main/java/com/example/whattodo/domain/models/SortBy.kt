@@ -5,4 +5,6 @@ sealed class SortBy {
     data object CreationDateDescending : SortBy()
     data object ValidDateAscending : SortBy()
     data object ValidDateDescending : SortBy()
+    data object PriorityHigh : SortBy()
+    data object PriorityLow : SortBy()
 }

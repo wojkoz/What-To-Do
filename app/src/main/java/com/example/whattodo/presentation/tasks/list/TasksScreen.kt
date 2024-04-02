@@ -172,6 +172,20 @@ fun TasksScreen(
                                     showSortByMenu = false
                                 }
                             )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(id = R.string.sort_by_priority_high)) },
+                                onClick = {
+                                    onEvent(TasksEvent.OnSortChange(SortBy.PriorityHigh))
+                                    showSortByMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(id = R.string.sort_by_priority_low)) },
+                                onClick = {
+                                    onEvent(TasksEvent.OnSortChange(SortBy.PriorityLow))
+                                    showSortByMenu = false
+                                }
+                            )
                         }
                     }
                 }
