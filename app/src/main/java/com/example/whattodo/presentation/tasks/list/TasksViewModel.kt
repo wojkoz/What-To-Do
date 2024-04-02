@@ -13,7 +13,9 @@ import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnExportTasksClick
-import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnImportTasksClick
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnImportTasks
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnImportTasksDismiss
+import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnImportTasksSettingsSelected
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnScreenStarted
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnSortChange
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskDone
@@ -29,6 +31,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -56,7 +59,25 @@ class TasksViewModel @Inject constructor(
             is OnTaskUnDone -> onTaskUnDone(event.taskItem)
             is OnSortChange -> onSortChange(event.sortBy)
             OnExportTasksClick -> onExportTasks()
-            OnImportTasksClick -> TODO()
+            is OnImportTasks -> onImportTasks(event.json)
+            OnImportTasksDismiss -> TODO()
+            is OnImportTasksSettingsSelected -> TODO()
+        }
+    }
+
+    private fun onImportTasks(json: String?) {
+        viewModelScope.launch {
+            if (json == null) {
+                //todo
+            } else {
+                try {
+                    val tasks = Json.decodeFromString<List<TaskList>>(json)
+                } catch (e: SerializationException){
+                    //todo
+                } catch (e: IllegalArgumentException) {
+                    //todo
+                }
+            }
         }
     }
 
@@ -70,6 +91,9 @@ class TasksViewModel @Inject constructor(
                         result.data?.let {
                             val json = Json.encodeToString(it)
                             _uiEvent.send(TasksUiEvents.OpenFileSaveDialog(json))
+                            _uiState.update { state ->
+                                state.copy(isLoading = false)
+                            }
                         }
                     }
                 }

@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.example.whattodo.R
 import com.example.whattodo.domain.models.SortBy
 import com.example.whattodo.domain.models.task.item.TaskItem
+import com.example.whattodo.presentation.tasks.composables.ImportTasksSettingsDialog
 import com.example.whattodo.presentation.tasks.composables.ListChooser
 import com.example.whattodo.presentation.tasks.composables.TaskListCreator
 import com.example.whattodo.presentation.tasks.composables.TaskListView
@@ -46,10 +47,13 @@ import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskUnDon
 import com.example.whattodo.presentation.tasks.list.model.TasksState
 import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents
 import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents.OpenFileSaveDialog
+import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents.ShowImportSettingsDialog
+import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents.ShowMessage
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
 import com.example.whattodo.ui.composables.ExportOrImportTasksDialog
 import com.example.whattodo.utils.files.alterDocument
+import com.example.whattodo.utils.files.readTextFromUri
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -63,6 +67,7 @@ fun TasksScreen(
     var showCreateTaskListDialog by remember { mutableStateOf(false) }
     var showSortByMenu by remember { mutableStateOf(false) }
     var showImportOrExportDialog by remember { mutableStateOf(false) }
+    var showImportTasksSettingsDialog by remember { mutableStateOf(false) }
     var json: String? by remember {
         mutableStateOf(null)
     }
@@ -87,6 +92,12 @@ fun TasksScreen(
             json = null
         }
     }
+    val openFileLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) {
+        it?.let { uri ->
+            showImportOrExportDialog = false
+            onEvent(TasksEvent.OnImportTasks(json = readTextFromUri(uri = uri, context = context)))
+        }
+    }
 
     LaunchedEffect(key1 = true) {
         onEvent(OnScreenStarted)
@@ -99,6 +110,12 @@ fun TasksScreen(
                     json = event.json
                     fileSaveLauncher.launch("db.json")
                 }
+
+                is ShowMessage -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                }
+
+                ShowImportSettingsDialog -> showImportTasksSettingsDialog = true
             }
         }
     }
@@ -240,9 +257,21 @@ fun TasksScreen(
 
             if (showImportOrExportDialog) {
                 ExportOrImportTasksDialog(
-                    onImport = { onEvent(TasksEvent.OnImportTasksClick) },
+                    onImport = { openFileLauncher.launch(arrayOf("application/json")) },
                     onExport = { onEvent(TasksEvent.OnExportTasksClick) },
                     onDismiss = { showImportOrExportDialog = false },
+                )
+            }
+
+            if (showImportTasksSettingsDialog) {
+                ImportTasksSettingsDialog(
+                    onDismiss = {
+                        showImportTasksSettingsDialog = false
+                        onEvent(TasksEvent.OnImportTasksDismiss)
+                    },
+                    onImport = {
+                        onEvent(TasksEvent.OnImportTasksSettingsSelected(option = it))
+                    }
                 )
             }
 
