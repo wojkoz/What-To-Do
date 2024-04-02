@@ -19,4 +19,10 @@ interface TaskListDao {
 
     @Delete
     suspend fun delete(taskList: TaskListEntity)
+
+    @Query("DELETE FROM TaskListEntity")
+    suspend fun clearDb()
+
+    @Query("SELECT * FROM TaskListEntity WHERE title LIKE :name LIMIT 1")
+    suspend fun contains(name: String): TaskListEntity?
 }

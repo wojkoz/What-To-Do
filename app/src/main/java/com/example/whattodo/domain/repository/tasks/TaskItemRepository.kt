@@ -11,6 +11,8 @@ interface TaskItemRepository {
 
     suspend fun insert(item: CreateTaskItem)
 
+    suspend fun insertAll(items: List<TaskItem>, asNewItems: Boolean, parentId: Long)
+
     suspend fun delete(item: TaskItem)
 
     suspend fun getByParentId(

@@ -203,40 +203,42 @@ fun TasksScreen(
                     Spacer(modifier = Modifier.height(20.dp))
                 }
 
-                item {
-                    // to do listView
-                    TaskListView(
-                        title = stringResource(id = R.string.todo_list),
-                        items = state.todoTaskItemsList,
-                        onAddTaskClick = { taskItemId ->
-                            state.activeTaskList?.let { parentList ->
-                                onNavigateToCreateTask(parentList.id, taskItemId)
-                            }
-                        },
-                        onTaskDone = { taskItem: TaskItem ->
-                            onEvent(OnTaskDone(taskItem))
-                        },
-                        modifier = Modifier
-                            .padding(horizontal = 10.dp)
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
+                if (state.activeTaskList != null) {
+                    item {
+                        // to do listView
+                        TaskListView(
+                            title = stringResource(id = R.string.todo_list),
+                            items = state.todoTaskItemsList,
+                            onAddTaskClick = { taskItemId ->
+                                state.activeTaskList?.let { parentList ->
+                                    onNavigateToCreateTask(parentList.id, taskItemId)
+                                }
+                            },
+                            onTaskDone = { taskItem: TaskItem ->
+                                onEvent(OnTaskDone(taskItem))
+                            },
+                            modifier = Modifier
+                                .padding(horizontal = 10.dp)
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
 
-                item {
-                    // done listView
-                    TaskListView(
-                        title = stringResource(id = R.string.done_list),
-                        items = state.doneTaskItemsList,
-                        onAddTaskClick = {},
-                        onTaskDone = { taskItem: TaskItem ->
-                            onEvent(OnTaskUnDone(taskItem))
-                        },
-                        showAddButton = false,
-                        modifier = Modifier
-                            .padding(horizontal = 10.dp)
-                    )
+                    item {
+                        // done listView
+                        TaskListView(
+                            title = stringResource(id = R.string.done_list),
+                            items = state.doneTaskItemsList,
+                            onAddTaskClick = {},
+                            onTaskDone = { taskItem: TaskItem ->
+                                onEvent(OnTaskUnDone(taskItem))
+                            },
+                            showAddButton = false,
+                            modifier = Modifier
+                                .padding(horizontal = 10.dp)
+                        )
+                    }
                 }
 
                 item {
@@ -270,6 +272,7 @@ fun TasksScreen(
                         onEvent(TasksEvent.OnImportTasksDismiss)
                     },
                     onImport = {
+                        showImportTasksSettingsDialog = false
                         onEvent(TasksEvent.OnImportTasksSettingsSelected(option = it))
                     }
                 )

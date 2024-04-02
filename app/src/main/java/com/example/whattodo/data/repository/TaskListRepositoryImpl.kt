@@ -4,6 +4,8 @@ import com.example.whattodo.data.local.entities.tasks.TaskItemDao
 import com.example.whattodo.data.local.entities.tasks.TaskListDao
 import com.example.whattodo.data.local.entities.tasks.TaskListEntity
 import com.example.whattodo.data.mappers.task.toTaskItem
+import com.example.whattodo.data.mappers.task.toTaskItemEntity
+import com.example.whattodo.data.mappers.task.toTaskItemEntityAsNew
 import com.example.whattodo.data.mappers.task.toTaskList
 import com.example.whattodo.data.mappers.task.toTaskListEntity
 import com.example.whattodo.data.model.task.CreateTaskList
@@ -44,6 +46,30 @@ class TaskListRepositoryImpl @Inject constructor(
         taskListDao.delete(taskList.toTaskListEntity())
     }
 
+    override suspend fun importAll(
+        tasksLists: List<TaskList>,
+        clearDb: Boolean,
+    ) {
+        if (clearDb) {
+            taskItemDao.clearDb()
+            taskListDao.clearDb()
+        }
+        tasksLists.forEach {
+            val oldList = taskListDao.contains(it.title)
+            if (oldList != null) {
+                val newEntities = (it.todoTasksItems + it.doneTasksItems)
+                    .map { item -> item.toTaskItemEntityAsNew(oldList.id) }
+                taskItemDao.upsertAll(newEntities)
+            } else {
+                taskListDao.insert(CreateTaskList(isActive = it.isActive, title = it.title).toTaskListEntity())
+                val newTaskList = taskListDao.contains(it.title)
+                val newEntities = (it.todoTasksItems + it.doneTasksItems)
+                    .map { item -> item.toTaskItemEntity(parentListId = newTaskList?.id) }
+                taskItemDao.upsertAll(newEntities)
+            }
+        }
+    }
+
     private suspend fun populateTaskList(taskListEntity: TaskListEntity?): TaskList? {
         if (taskListEntity?.id == null) {
             return null
@@ -51,7 +77,7 @@ class TaskListRepositoryImpl @Inject constructor(
 
         val tasks = taskItemDao.getByParentId(taskListEntity.id)
         val todoTasks = tasks.filter { task -> !task.isDone }
-        val doneTasks = tasks.filter {task -> task.isDone}
+        val doneTasks = tasks.filter { task -> task.isDone }
         return taskListEntity.toTaskList(
             todoTasksCount = todoTasks.size,
             allTasksCount = tasks.size,

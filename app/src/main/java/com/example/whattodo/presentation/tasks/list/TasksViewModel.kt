@@ -2,6 +2,7 @@ package com.example.whattodo.presentation.tasks.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.whattodo.R
 import com.example.whattodo.domain.models.SortBy
 import com.example.whattodo.domain.models.task.item.TaskItem
 import com.example.whattodo.domain.models.task.list.TaskList
@@ -9,8 +10,13 @@ import com.example.whattodo.domain.repository.DataResult
 import com.example.whattodo.domain.repository.DataResult.Error
 import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
+import com.example.whattodo.domain.repository.tasks.TaskItemRepository
+import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
+import com.example.whattodo.presentation.tasks.composables.ImportTasksSettings
+import com.example.whattodo.presentation.tasks.composables.ImportTasksSettings.ADD_AS_NEW
+import com.example.whattodo.presentation.tasks.composables.ImportTasksSettings.CLEAR_DB_AND_ADD
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnExportTasksClick
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnImportTasks
@@ -24,6 +30,7 @@ import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskListS
 import com.example.whattodo.presentation.tasks.list.model.TasksEvent.OnTaskUnDone
 import com.example.whattodo.presentation.tasks.list.model.TasksState
 import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents
+import com.example.whattodo.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,12 +41,15 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     private val taskListUseCases: TaskListUseCases,
     private val taskItemUseCases: TaskItemUseCases,
+    private val tasksListRepository: TasksListRepository,
+    private val taskItemRepository: TaskItemRepository,
 ) : ViewModel() {
 
     private val _uiEvent = Channel<TasksUiEvents>()
@@ -49,6 +59,8 @@ class TasksViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     private var _sortBy: SortBy = SortBy.CreationDateDescending
+
+    private var _importedTasksLists: List<TaskList>? = null
 
     fun onEvent(event: TasksEvent) {
         when (event) {
@@ -60,22 +72,57 @@ class TasksViewModel @Inject constructor(
             is OnSortChange -> onSortChange(event.sortBy)
             OnExportTasksClick -> onExportTasks()
             is OnImportTasks -> onImportTasks(event.json)
-            OnImportTasksDismiss -> TODO()
-            is OnImportTasksSettingsSelected -> TODO()
+            OnImportTasksDismiss -> onImportTasksDismiss()
+            is OnImportTasksSettingsSelected -> onImportTasksSettingsSelected(event.option)
+        }
+    }
+
+    private fun onImportTasksSettingsSelected(option: ImportTasksSettings) {
+        viewModelScope.launch {
+            val importedTasks = _importedTasksLists
+            if (importedTasks != null) {
+                when (option) {
+                    CLEAR_DB_AND_ADD -> tasksListRepository.importAll(importedTasks, clearDb = true)
+                    ADD_AS_NEW -> tasksListRepository.importAll(importedTasks, clearDb = false)
+                }
+                loadAllTaskLists()
+            }
+        }
+    }
+
+    private fun onImportTasksDismiss() {
+        viewModelScope.launch {
+            _importedTasksLists = null
         }
     }
 
     private fun onImportTasks(json: String?) {
         viewModelScope.launch {
             if (json == null) {
-                //todo
+                _importedTasksLists = null
+                _uiEvent.send(
+                    TasksUiEvents.ShowMessage(
+                        message = UiText.StringResource(R.string.error_could_not_parse_file)
+                    )
+                )
             } else {
                 try {
-                    val tasks = Json.decodeFromString<List<TaskList>>(json)
-                } catch (e: SerializationException){
-                    //todo
+                    _importedTasksLists = Json.decodeFromString<List<TaskList>>(json)
+                    _uiEvent.send(TasksUiEvents.ShowImportSettingsDialog)
+                } catch (e: SerializationException) {
+                    Timber.d(e)
+                    _uiEvent.send(
+                        TasksUiEvents.ShowMessage(
+                            message = UiText.StringResource(R.string.error_could_not_deserialize_json)
+                        )
+                    )
                 } catch (e: IllegalArgumentException) {
-                    //todo
+                    Timber.d(e)
+                    _uiEvent.send(
+                        TasksUiEvents.ShowMessage(
+                            message = UiText.StringResource(R.string.error_could_not_deserialize_json)
+                        )
+                    )
                 }
             }
         }

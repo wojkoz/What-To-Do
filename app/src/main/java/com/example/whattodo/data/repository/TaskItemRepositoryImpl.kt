@@ -4,6 +4,7 @@ import com.example.whattodo.R
 import com.example.whattodo.data.local.entities.tasks.TaskItemDao
 import com.example.whattodo.data.mappers.task.toTaskItem
 import com.example.whattodo.data.mappers.task.toTaskItemEntity
+import com.example.whattodo.data.mappers.task.toTaskItemEntityAsNew
 import com.example.whattodo.data.model.task.CreateTaskItem
 import com.example.whattodo.domain.models.SortBy
 import com.example.whattodo.domain.models.SortBy.CreationDateAscending
@@ -24,6 +25,18 @@ class TaskItemRepositoryImpl(private val taskItemDao: TaskItemDao) : TaskItemRep
 
     override suspend fun insert(item: CreateTaskItem) {
         taskItemDao.insert(item.toTaskItemEntity())
+    }
+
+    override suspend fun insertAll(
+        items: List<TaskItem>,
+        asNewItems: Boolean,
+        parentId: Long,
+    ) {
+        if (asNewItems) {
+            taskItemDao.upsertAll(items.map { it.toTaskItemEntityAsNew(parentId) })
+        } else {
+            taskItemDao.upsertAll(items.map { it.toTaskItemEntity() })
+        }
     }
 
     override suspend fun delete(item: TaskItem) {

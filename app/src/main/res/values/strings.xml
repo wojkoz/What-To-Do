@@ -39,4 +39,6 @@
   <string name="clear_db_and_add">Clear all tasks and add imported items</string>
   <string name="add_tasks_as_new">Add imported tasks</string>
   <string name="choose_import_settings">Choose import settings</string>
+  <string name="error_could_not_parse_file">File could not be parsed!</string>
+  <string name="error_could_not_deserialize_json">Json could not be deserialized!</string>
 </resources>

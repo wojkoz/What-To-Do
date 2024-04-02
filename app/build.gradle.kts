@@ -107,6 +107,9 @@ dependencies {
 
     //Detekt rules
     detektPlugins("io.nlopez.compose.rules:detekt:0.3.3")
+
+    // Timber
+    implementation("com.jakewharton.timber:timber:5.0.1")
 }
 
 kapt {
