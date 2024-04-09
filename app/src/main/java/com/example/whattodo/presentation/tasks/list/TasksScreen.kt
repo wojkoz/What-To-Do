@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.example.whattodo.R
 import com.example.whattodo.domain.models.SortBy
 import com.example.whattodo.domain.models.task.item.TaskItem
+import com.example.whattodo.presentation.tasks.composables.BluetoothExport
 import com.example.whattodo.presentation.tasks.composables.ImportTasksSettingsDialog
 import com.example.whattodo.presentation.tasks.composables.ListChooser
 import com.example.whattodo.presentation.tasks.composables.TaskListCreator
@@ -52,6 +53,7 @@ import com.example.whattodo.presentation.tasks.list.model.TasksUiEvents.ShowMess
 import com.example.whattodo.ui.composables.AppBar
 import com.example.whattodo.ui.composables.CustomProgressIndicator
 import com.example.whattodo.ui.composables.ExportOrImportTasksDialog
+import com.example.whattodo.utils.bluetooth.BluetoothManagerDelegate
 import com.example.whattodo.utils.files.alterDocument
 import com.example.whattodo.utils.files.readTextFromUri
 import kotlinx.coroutines.flow.Flow
@@ -64,14 +66,16 @@ fun TasksScreen(
     onNavigateToCreateTask: (parentListId: Long, taskId: Long?) -> Unit,
     onUiEvent: Flow<TasksUiEvents>,
 ) {
+    val context = LocalContext.current
     var showCreateTaskListDialog by remember { mutableStateOf(false) }
     var showSortByMenu by remember { mutableStateOf(false) }
     var showImportOrExportDialog by remember { mutableStateOf(false) }
     var showImportTasksSettingsDialog by remember { mutableStateOf(false) }
+    var showBluetoothExportDialog by remember { mutableStateOf(false) }
+    val bluetoothManagerDelegate = remember { BluetoothManagerDelegate(context) }
     var json: String? by remember {
         mutableStateOf(null)
     }
-    val context = LocalContext.current
     val fileSaveLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/json")
     ) {
@@ -224,9 +228,7 @@ fun TasksScreen(
                             title = stringResource(id = R.string.todo_list),
                             items = state.todoTaskItemsList,
                             onAddTaskClick = { taskItemId ->
-                                state.activeTaskList?.let { parentList ->
-                                    onNavigateToCreateTask(parentList.id, taskItemId)
-                                }
+                                onNavigateToCreateTask(state.activeTaskList.id, taskItemId)
                             },
                             onTaskDone = { taskItem: TaskItem ->
                                 onEvent(OnTaskDone(taskItem))
@@ -276,6 +278,11 @@ fun TasksScreen(
                     onImport = { openFileLauncher.launch(arrayOf("application/json")) },
                     onExport = { onEvent(TasksEvent.OnExportTasksClick) },
                     onDismiss = { showImportOrExportDialog = false },
+                    onBluetoothExport = {
+                        showImportOrExportDialog = false
+                        showBluetoothExportDialog = true
+                    },
+                    isBluetoothAvailable = bluetoothManagerDelegate.isBluetoothAvailable()
                 )
             }
 
@@ -289,6 +296,15 @@ fun TasksScreen(
                         showImportTasksSettingsDialog = false
                         onEvent(TasksEvent.OnImportTasksSettingsSelected(option = it))
                     }
+                )
+            }
+
+            if (showBluetoothExportDialog) {
+                BluetoothExport(
+                    onDismiss = {
+                        showBluetoothExportDialog = false
+                    },
+                    bluetoothManagerDelegate = bluetoothManagerDelegate
                 )
             }
 

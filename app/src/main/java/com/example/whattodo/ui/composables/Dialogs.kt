@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -66,6 +67,8 @@ fun ExportOrImportTasksDialog(
     onDismiss: () -> Unit,
     onExport: () -> Unit,
     onImport: () -> Unit,
+    onBluetoothExport: () -> Unit,
+    isBluetoothAvailable: Boolean,
 ) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Column(
@@ -95,6 +98,16 @@ fun ExportOrImportTasksDialog(
                     Text(text = stringResource(id = string.export_db))
                 }
             }
+            if (isBluetoothAvailable) {
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(text = stringResource(id = string.bluetooth_export))
+                Spacer(modifier = Modifier.height(10.dp))
+                Button(
+                    onClick = { onBluetoothExport.invoke() },
+                ) {
+                    Text(text = stringResource(id = string.export_db))
+                }
+            }
         }
     }
 }
@@ -116,5 +129,7 @@ fun PreviewExportOrImportTasksDialog() {
         onDismiss = {},
         onExport = {},
         onImport = {},
+        onBluetoothExport = {},
+        isBluetoothAvailable = true
     )
 }

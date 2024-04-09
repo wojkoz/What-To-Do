@@ -20,11 +20,15 @@ import com.example.whattodo.presentation.tasks.list.TasksViewModel
 import com.example.whattodo.ui.theme.WhatToDoTheme
 import com.example.whattodo.utils.Route
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import timber.log.Timber.DebugTree
+import timber.log.Timber.Forest
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.plant(DebugTree())
         setContent {
             WhatToDoTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
