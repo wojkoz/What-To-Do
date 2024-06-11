@@ -7,12 +7,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -48,7 +49,7 @@ fun BluetoothExport(
         if (activityResult.resultCode == RESULT_OK) {
             Timber.d("Bluetooth is turned on")
         } else {
-            Timber.d("Can't turn on bluetooth")
+            Timber.d("Can't turn on bluetooth $activityResult")
         }
 
         isBluetoothEnabled = bluetoothManagerDelegate.isBluetoothEnabled()
@@ -56,6 +57,7 @@ fun BluetoothExport(
 
     fun onPermissionResult(result: Map<String, Boolean>) {
         val arePermissionsGranted = result.values.all { it }
+        Timber.tag("BluetoothExport").d("arePermissionsGranted: %s", result)
         if (arePermissionsGranted) {
             val blIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             launchBluetooth.launch(blIntent)
@@ -66,12 +68,14 @@ fun BluetoothExport(
         permissions = listOf(
             Manifest.permission.BLUETOOTH_CONNECT,
             Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_ADMIN,
         ),
         onPermissionsResult = ::onPermissionResult
     )
     val permissionsStateSdkBelow31 = rememberMultiplePermissionsState(
         permissions = listOf(
             Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_ADMIN,
         ),
         onPermissionsResult = ::onPermissionResult
     )
@@ -86,7 +90,10 @@ fun BluetoothExport(
 
     Dialog(onDismissRequest = onDismiss) {
         Column(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            modifier = Modifier
+                .background(color = MaterialTheme.colorScheme.background)
+                .fillMaxSize()
+                .padding(all = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
