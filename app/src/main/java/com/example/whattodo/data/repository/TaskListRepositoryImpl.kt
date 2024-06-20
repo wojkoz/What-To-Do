@@ -10,6 +10,7 @@ import com.example.whattodo.data.mappers.task.toTaskList
 import com.example.whattodo.data.mappers.task.toTaskListEntity
 import com.example.whattodo.data.model.task.CreateTaskList
 import com.example.whattodo.domain.models.task.list.TaskList
+import com.example.whattodo.domain.notificationScheduler.NotificationScheduler
 import com.example.whattodo.domain.repository.DataResult
 import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class TaskListRepositoryImpl @Inject constructor(
     private val taskListDao: TaskListDao,
     private val taskItemDao: TaskItemDao,
+    private val notificationScheduler: NotificationScheduler,
 ) : TasksListRepository {
     override suspend fun getAll(): Flow<DataResult<List<TaskList>>> {
         return flow {
@@ -53,6 +55,7 @@ class TaskListRepositoryImpl @Inject constructor(
         if (clearDb) {
             taskItemDao.clearDb()
             taskListDao.clearDb()
+            notificationScheduler.cancelAllScheduledNotification()
         }
         tasksLists.forEach {
             val oldList = taskListDao.contains(it.title)

@@ -43,4 +43,5 @@
   <string name="choose_import_settings">Choose import settings</string>
   <string name="error_could_not_parse_file">File could not be parsed!</string>
   <string name="error_could_not_deserialize_json">Json could not be deserialized!</string>
+  <string name="notification_channel_name">WTD Notification Channel</string>
 </resources>
