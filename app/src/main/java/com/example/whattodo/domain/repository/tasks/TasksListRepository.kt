@@ -16,5 +16,8 @@ interface TasksListRepository {
 
     suspend fun delete(taskList: TaskList)
 
-    suspend fun importAll(tasksLists: List<TaskList>, clearDb: Boolean)
+    suspend fun importAll(
+        tasksLists: List<TaskList>,
+        clearDb: Boolean,
+    )
 }
