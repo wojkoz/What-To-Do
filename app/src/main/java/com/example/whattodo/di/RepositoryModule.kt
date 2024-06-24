@@ -7,6 +7,7 @@ import com.example.whattodo.data.local.entities.tasks.TaskItemDao
 import com.example.whattodo.data.local.entities.tasks.TaskListDao
 import com.example.whattodo.data.repository.TaskItemRepositoryImpl
 import com.example.whattodo.data.repository.TaskListRepositoryImpl
+import com.example.whattodo.domain.notificationScheduler.NotificationScheduler
 import com.example.whattodo.domain.repository.tasks.TaskItemRepository
 import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import dagger.Module
@@ -38,15 +39,26 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideTaskItemRepository(taskItemDao: TaskItemDao): TaskItemRepository = TaskItemRepositoryImpl(taskItemDao)
+    fun provideTaskItemRepository(
+        taskItemDao: TaskItemDao,
+        notificationScheduler: NotificationScheduler,
+    ): TaskItemRepository = TaskItemRepositoryImpl(
+        taskItemDao,
+        notificationScheduler = notificationScheduler
+    )
 
     @Singleton
     @Provides
     fun provideTaskListRepository(
         taskListDao: TaskListDao,
         taskItemDao: TaskItemDao,
+        notificationScheduler: NotificationScheduler,
     ): TasksListRepository {
-        return TaskListRepositoryImpl(taskListDao, taskItemDao)
+        return TaskListRepositoryImpl(
+            taskListDao = taskListDao,
+            taskItemDao = taskItemDao,
+            notificationScheduler = notificationScheduler
+        )
     }
 }
 

@@ -1,5 +1,8 @@
 package com.example.whattodo.presentation.tasks.list
 
+import android.Manifest
+import android.os.Build
+import android.os.Build.VERSION
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,6 +34,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.PermissionChecker
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import com.example.whattodo.R
 import com.example.whattodo.domain.models.SortBy
 import com.example.whattodo.domain.models.task.item.TaskItem
@@ -68,6 +73,7 @@ fun TasksScreen(
     var showSortByMenu by remember { mutableStateOf(false) }
     var showImportOrExportDialog by remember { mutableStateOf(false) }
     var showImportTasksSettingsDialog by remember { mutableStateOf(false) }
+    var hasNotificationPermission by remember { mutableStateOf(false) }
     var json: String? by remember {
         mutableStateOf(null)
     }
@@ -98,8 +104,19 @@ fun TasksScreen(
             onEvent(TasksEvent.OnImportTasks(json = readTextFromUri(uri = uri, context = context)))
         }
     }
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { hasNotificationPermission = it }
+    )
 
     LaunchedEffect(key1 = true) {
+        if (checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PermissionChecker.PERMISSION_GRANTED) {
+            hasNotificationPermission = true
+        } else {
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
         onEvent(OnScreenStarted)
     }
 
@@ -186,6 +203,14 @@ fun TasksScreen(
                                     showSortByMenu = false
                                 }
                             )
+                            if (!hasNotificationPermission && VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                DropdownMenuItem(
+                                    text = { Text(text = "Allow notifications") },
+                                    onClick = {
+                                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                    }
+                                )
+                            }
                         }
                     }
                 }

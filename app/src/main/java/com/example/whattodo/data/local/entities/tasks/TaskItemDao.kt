@@ -8,7 +8,7 @@ import androidx.room.Upsert
 @Dao
 interface TaskItemDao {
     @Upsert
-    suspend fun insert(item: TaskItemEntity)
+    suspend fun insert(item: TaskItemEntity): Long
 
     @Delete
     suspend fun delete(item: TaskItemEntity)
@@ -23,5 +23,5 @@ interface TaskItemDao {
     suspend fun clearDb()
 
     @Upsert
-    suspend fun upsertAll(items: List<TaskItemEntity>)
+    suspend fun upsertAll(items: List<TaskItemEntity>): List<Long>
 }

@@ -4,6 +4,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -21,4 +22,8 @@ val dateFormat = "dd/MM/yyyy"
 
 fun getLocalDateFromMillis(millis: Long): LocalDate{
     return Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDate()
+}
+
+fun LocalDateTime.getSecondsFromEpoch(): Long {
+    return this.toEpochSecond(ZoneOffset.of(ZoneId.systemDefault().rules.getOffset(Instant.now()).toString()))
 }
