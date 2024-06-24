@@ -83,7 +83,7 @@ class NotificationSchedulerImpl(private val context: Context) : NotificationSche
             .setInitialDelay(delaySeconds, TimeUnit.SECONDS).setInputData(data).build()
 
         val instanceWorkManager = WorkManager.getInstance(context)
-        val uniqueName = "${NOTIFICATION_WORK}_${id}"
+        val uniqueName = "${NOTIFICATION_WORK}_$id"
         instanceWorkManager.beginUniqueWork(
             uniqueName,
             REPLACE,
