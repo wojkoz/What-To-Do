@@ -162,12 +162,22 @@ class TasksViewModel @Inject constructor(
     ) {
         _uiState.update { state ->
             state.copy(
-                todoTaskItemsList = if (todoTasks != null) taskItemUseCases.sortTaskItemsUseCase(
-                    todoTasks, sortBy
-                ) else state.todoTaskItemsList,
-                doneTaskItemsList = if (doneTasks != null) taskItemUseCases.sortTaskItemsUseCase(
-                    doneTasks, sortBy
-                ) else state.doneTaskItemsList,
+                todoTaskItemsList = if (todoTasks != null) {
+                    taskItemUseCases.sortTaskItemsUseCase(
+                        todoTasks,
+                        sortBy
+                    )
+                } else {
+                    state.todoTaskItemsList
+                },
+                doneTaskItemsList = if (doneTasks != null) {
+                    taskItemUseCases.sortTaskItemsUseCase(
+                        doneTasks,
+                        sortBy
+                    )
+                } else {
+                    state.doneTaskItemsList
+                },
             )
         }
     }
