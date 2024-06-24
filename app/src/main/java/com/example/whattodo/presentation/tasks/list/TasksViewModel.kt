@@ -10,8 +10,6 @@ import com.example.whattodo.domain.repository.DataResult
 import com.example.whattodo.domain.repository.DataResult.Error
 import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
-import com.example.whattodo.domain.repository.tasks.TaskItemRepository
-import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
 import com.example.whattodo.presentation.tasks.composables.ImportTasksSettings
