@@ -38,7 +38,6 @@ class NotificationSchedulerImpl(private val context: Context) : NotificationSche
                 .putString(NOTIFICATION_MESSAGE, item.content)
                 .build()
 
-            // -1 hour because notifications should appear 1h before task ends
             scheduleNotificationWithWorker(
                 data = data,
                 delaySeconds = getDelayInSeconds(item.validUntil),
@@ -65,9 +64,8 @@ class NotificationSchedulerImpl(private val context: Context) : NotificationSche
     private fun getDelayInSeconds(endTime: LocalDateTime): Long {
         val endTimeSeconds = endTime.minusHours(1).getSecondsFromEpoch()
         val nowSeconds = Instant.now().epochSecond
-        val hourInSeconds = 3600
         val diff = endTimeSeconds - nowSeconds
-        val delay = if (diff >= hourInSeconds) {
+        val delay = if (diff >= TIME_BEFORE_SHOW_NOTIFICATION_IN_SECONDS) {
             diff
         } else {
             0
@@ -104,5 +102,9 @@ class NotificationSchedulerImpl(private val context: Context) : NotificationSche
         } else {
             NotificationManagerCompat.from(context).areNotificationsEnabled()
         }
+    }
+
+    companion object {
+        private const val TIME_BEFORE_SHOW_NOTIFICATION_IN_SECONDS = 3600
     }
 }
