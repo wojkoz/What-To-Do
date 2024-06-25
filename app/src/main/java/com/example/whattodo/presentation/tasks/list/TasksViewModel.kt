@@ -10,8 +10,6 @@ import com.example.whattodo.domain.repository.DataResult
 import com.example.whattodo.domain.repository.DataResult.Error
 import com.example.whattodo.domain.repository.DataResult.Loading
 import com.example.whattodo.domain.repository.DataResult.Success
-import com.example.whattodo.domain.repository.tasks.TaskItemRepository
-import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import com.example.whattodo.domain.usecase.task.TaskItemUseCases
 import com.example.whattodo.domain.usecase.task.TaskListUseCases
 import com.example.whattodo.presentation.tasks.composables.ImportTasksSettings
@@ -48,8 +46,6 @@ import javax.inject.Inject
 class TasksViewModel @Inject constructor(
     private val taskListUseCases: TaskListUseCases,
     private val taskItemUseCases: TaskItemUseCases,
-    private val tasksListRepository: TasksListRepository,
-    private val taskItemRepository: TaskItemRepository,
 ) : ViewModel() {
 
     private val _uiEvent = Channel<TasksUiEvents>()
@@ -82,8 +78,8 @@ class TasksViewModel @Inject constructor(
             val importedTasks = _importedTasksLists
             if (importedTasks != null) {
                 when (option) {
-                    CLEAR_DB_AND_ADD -> tasksListRepository.importAll(importedTasks, clearDb = true)
-                    ADD_AS_NEW -> tasksListRepository.importAll(importedTasks, clearDb = false)
+                    CLEAR_DB_AND_ADD -> taskListUseCases.importAllTasksUseCase(importedTasks, clearDb = true)
+                    ADD_AS_NEW -> taskListUseCases.importAllTasksUseCase(importedTasks, clearDb = false)
                 }
                 loadAllTaskLists()
             }
@@ -166,12 +162,22 @@ class TasksViewModel @Inject constructor(
     ) {
         _uiState.update { state ->
             state.copy(
-                todoTaskItemsList = if (todoTasks != null) taskItemUseCases.sortTaskItemsUseCase(
-                    todoTasks, sortBy
-                ) else state.todoTaskItemsList,
-                doneTaskItemsList = if (doneTasks != null) taskItemUseCases.sortTaskItemsUseCase(
-                    doneTasks, sortBy
-                ) else state.doneTaskItemsList,
+                todoTaskItemsList = if (todoTasks != null) {
+                    taskItemUseCases.sortTaskItemsUseCase(
+                        todoTasks,
+                        sortBy
+                    )
+                } else {
+                    state.todoTaskItemsList
+                },
+                doneTaskItemsList = if (doneTasks != null) {
+                    taskItemUseCases.sortTaskItemsUseCase(
+                        doneTasks,
+                        sortBy
+                    )
+                } else {
+                    state.doneTaskItemsList
+                },
             )
         }
     }

@@ -16,6 +16,7 @@ import com.example.whattodo.domain.usecase.task.list.CreateTaskListUseCase
 import com.example.whattodo.domain.usecase.task.list.DeleteTaskListUseCase
 import com.example.whattodo.domain.usecase.task.list.GetActiveTaskListUseCase
 import com.example.whattodo.domain.usecase.task.list.GetAllTaskListUseCase
+import com.example.whattodo.domain.usecase.task.list.ImportAllTasksUseCase
 import com.example.whattodo.domain.usecase.task.list.InsertTaskListUseCase
 import dagger.Module
 import dagger.Provides
@@ -34,6 +35,7 @@ object UseCaseModule {
             deleteTaskListUseCase = DeleteTaskListUseCase(tasksListRepository),
             getActiveTaskListUseCase = GetActiveTaskListUseCase(tasksListRepository),
             insertActiveTaskUseCase = InsertTaskListUseCase(tasksListRepository),
+            importAllTasksUseCase = ImportAllTasksUseCase(tasksListRepository),
         )
     }
 

@@ -4,6 +4,7 @@ import com.example.whattodo.domain.usecase.task.list.CreateTaskListUseCase
 import com.example.whattodo.domain.usecase.task.list.DeleteTaskListUseCase
 import com.example.whattodo.domain.usecase.task.list.GetActiveTaskListUseCase
 import com.example.whattodo.domain.usecase.task.list.GetAllTaskListUseCase
+import com.example.whattodo.domain.usecase.task.list.ImportAllTasksUseCase
 import com.example.whattodo.domain.usecase.task.list.InsertTaskListUseCase
 
 data class TaskListUseCases(
@@ -11,5 +12,6 @@ data class TaskListUseCases(
     val deleteTaskListUseCase: DeleteTaskListUseCase,
     val getActiveTaskListUseCase: GetActiveTaskListUseCase,
     val getAllTaskListUseCase: GetAllTaskListUseCase,
-    val insertActiveTaskUseCase: InsertTaskListUseCase
+    val insertActiveTaskUseCase: InsertTaskListUseCase,
+    val importAllTasksUseCase: ImportAllTasksUseCase,
 )
