@@ -9,6 +9,7 @@ import com.example.whattodo.domain.repository.DataResult
 import com.example.whattodo.domain.repository.tasks.TasksListRepository
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -48,6 +49,7 @@ class TaskListRepositoryTest {
         Assertions.assertEquals(expectedTaskList.title, createdList?.title)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllTaskLists_returnsLoadingAndSuccessResults() = runTest {
         // Arrange
