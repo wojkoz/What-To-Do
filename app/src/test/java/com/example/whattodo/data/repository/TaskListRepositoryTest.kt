@@ -88,6 +88,7 @@ class TaskListRepositoryTest {
         Assertions.assertEquals(expectedTaskList.firstOrNull(), importedTaskList)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun importAll_verifyImportWithoutClearDb() = runTest {
         // Arrange
@@ -96,11 +97,27 @@ class TaskListRepositoryTest {
         val expectedTaskList = listOf(
             taskList.copy(id = 1, todoTasksItems = listOf(taskItem.copy(id = 1, parentListId = 1)))
         )
+        val expectedTaskList2 = listOf(
+            taskList.copy(
+                id = 2,
+                isActive = false,
+                title = "job",
+                todoTasksItems = listOf(taskItem.copy(id = 2, parentListId = 2, title = "ride to job"))
+            )
+        )
         // Act
         taskListRepository.importAll(expectedTaskList, clearDb = false)
+        taskListRepository.importAll(expectedTaskList2, clearDb = false)
         // Assert
         val importedTaskList = taskListRepository.getActive()
+        val allLists = mutableListOf<DataResult<List<TaskList>>>()
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            taskListRepository.getAll().toList(allLists)
+        }
         Assertions.assertEquals(expectedTaskList.firstOrNull(), importedTaskList)
+        val successResult = allLists[1] as? DataResult.Success
+        Assertions.assertNotNull(successResult)
+        Assertions.assertEquals(expectedTaskList2, successResult?.data?.filter { !it.isActive })
     }
 
     private fun createTestTaskItem() = TaskItem(

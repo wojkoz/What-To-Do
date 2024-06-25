@@ -18,7 +18,7 @@ class TaskListDaoFake : TaskListDao {
     override suspend fun insert(taskList: TaskListEntity) {
         val taskListWithId = if (db.any { it.id == taskList.id }) {
             db.remove(taskList)
-            taskList.copy(id = 1)
+            taskList
         } else {
             taskList.copy(id = (db.lastOrNull()?.id ?: 0) + 1)
         }
