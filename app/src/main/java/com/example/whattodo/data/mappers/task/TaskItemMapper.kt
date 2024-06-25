@@ -25,7 +25,7 @@ fun TaskItem.toTaskItemEntity(parentListId: Long? = null): TaskItemEntity {
 fun TaskItemEntity.toTaskItem(): TaskItem {
     val createdAt = LocalDateTime.parse(this.createdAt, formatter)
     val validUntil = LocalDateTime.parse(this.validUntil, formatter)
-    val isValid = LocalDateTime.now() > validUntil
+    val isValid = LocalDateTime.now() < validUntil
     return TaskItem(
         id = this.id,
         title = this.title,
